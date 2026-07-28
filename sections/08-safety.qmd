@@ -1,0 +1,120 @@
+{{< include /_setup.qmd >}}
+
+# Safety evaluation
+
+## Extent of exposure
+
+```{r}
+#| label: exposure
+
+tlf_exposure(adex) |>
+  tbl_nordvale(
+    title = "Table 14.3.1: Extent of exposure",
+    subtitle = "Safety population",
+    source_note = "Exposure is the total treatment duration in days, derived from the exposure analysis dataset."
+  )
+```
+
+## Overview of adverse events
+
+```{r}
+#| label: ae-overview
+
+tlf_ae_overview(adae, adsl) |>
+  tbl_nordvale(
+    title = "Table 14.3.2: Overview of treatment-emergent adverse events",
+    subtitle = "Safety population",
+    source_note = "Subjects are counted once in each row. A treatment-emergent adverse event started on or after the first dose of study drug."
+  )
+```
+
+## Adverse events by system organ class and preferred term
+
+```{r}
+#| label: ae-soc-pt
+
+tlf_ae_by_soc_pt(adae, adsl) |>
+  tbl_nordvale(
+    title = "Table 14.3.3: Treatment-emergent adverse events by system organ class and preferred term",
+    subtitle = "Events reported by at least 5% of subjects, safety population",
+    source_note = "Subjects reporting more than one event within a system organ class or preferred term are counted once."
+  )
+```
+
+Application-site and other dermatologic events dominated the adverse event profile in both xanomeline groups.
+The pattern is consistent with the transdermal delivery system and with the primary endpoint result in Table 14.2.1.
+
+## Adverse events by maximum severity
+
+```{r}
+#| label: ae-severity
+
+tlf_ae_by_severity(adae, adsl) |>
+  tbl_nordvale(
+    title = "Table 14.3.4: Treatment-emergent adverse events by maximum severity",
+    subtitle = "Events reported by at least 5% of subjects, safety population",
+    source_note = "Subjects reporting more than one event within a preferred term are counted once, under the highest severity reported for that term."
+  )
+```
+
+## Adverse events by relationship to study drug
+
+```{r}
+#| label: ae-relationship
+
+tlf_ae_by_relationship(adae, adsl) |>
+  tbl_nordvale(
+    title = "Table 14.3.5: Treatment-emergent adverse events by relationship to study drug",
+    subtitle = "Events reported by at least 5% of subjects, safety population",
+    source_note = "Subjects reporting more than one event within a preferred term are counted once, as related if any event for that term was investigator-assessed as related."
+  )
+```
+
+## Serious adverse events and deaths
+
+```{r}
+#| label: ae-serious
+
+tlf_ae_serious(adae, adsl) |>
+  tbl_nordvale(
+    title = "Table 14.3.6: Serious treatment-emergent adverse events",
+    subtitle = "Safety population",
+    source_note = "Seriousness was assessed by the investigator according to the protocol definition."
+  )
+```
+
+Subject-level detail for every serious event is listed in @sec-appendix-tlf.
+
+## Laboratory evaluations
+
+```{r}
+#| label: lab-shift
+#| output: asis
+
+lab_shift_panel <- c(
+  "Alanine Aminotransferase (U/L)" = "Alanine aminotransferase",
+  "Aspartate Aminotransferase (U/L)" = "Aspartate aminotransferase",
+  "Bilirubin (umol/L)" = "Bilirubin",
+  "Creatinine (umol/L)" = "Creatinine"
+)
+
+tlf_shift_panel(adlb, lab_shift_panel)
+```
+
+Shifts to a high category were infrequent for each analyte in this panel and distributed similarly across treatment groups.
+No subject met the biochemical criteria for a drug-induced liver injury.
+
+## Vital signs
+
+```{r}
+#| label: vitals-shift
+
+tlf_shift(advs, "Systolic Blood Pressure (mmHg)") |>
+  tbl_nordvale(
+    title = "Table 14.3.8: Shift from baseline to worst post-baseline category",
+    subtitle = "Systolic blood pressure, safety population",
+    source_note = "Categories are relative to the reference range of the reporting site. The worst post-baseline category is high (hypertensive) if any post-baseline value was high, otherwise low (hypotensive) if any value was low."
+  )
+```
+
+Shifts to a high systolic blood pressure category occurred at a similar rate across treatment groups, with no excess of new hypotensive or hypertensive categories in either xanomeline group relative to placebo.

@@ -1,0 +1,18 @@
+document-type: "Clinical Study Report"
+report-version: "1.0"
+report-date: 2026-07-28
+status: draft
+approvals:
+  - name: Study Statistician
+    role: Biostatistics
+  - name: Clinical Study Lead
+    role: Clinical Development
+  - name: Medical Monitor
+    role: Clinical Safety and Pharmacovigilance
+revisions:
+  - version: "0.1"
+    date: 2026-06-15
+    summary: First draft for internal review.
+  - version: "1.0"
+    date: 2026-07-28
+    summary: Statistical results added after database lock.

@@ -1,0 +1,35 @@
+---
+title: "Clinical Study Report"
+subtitle: "A 24-week, randomised, double-blind, placebo-controlled study of xanomeline transdermal therapeutic system in patients with mild to moderate Alzheimer's disease"
+output-file: "Clinical-Study-Report"
+metadata-files:
+  - _metadata-csr.yml
+---
+
+{{< include index.qmd >}}
+
+{{< include sections/01-synopsis.qmd >}}
+
+{{< include sections/02-ethics.qmd >}}
+
+{{< include sections/03-design.qmd >}}
+
+{{< include sections/04-methods.qmd >}}
+
+{{< include sections/05-patients.qmd >}}
+
+{{< include sections/06-demographics.qmd >}}
+
+{{< include sections/07-efficacy.qmd >}}
+
+{{< include sections/08-safety.qmd >}}
+
+{{< include sections/09-conclusions.qmd >}}
+
+{{< include sections/10-references.qmd >}}
+
+{{< include sections/appendix-a-tlf.qmd >}}
+
+{{< include sections/appendix-b-reproducibility.qmd >}}
+
+{{< include sections/appendix-c-adrg.qmd >}}

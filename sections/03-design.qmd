@@ -1,0 +1,33 @@
+{{< include /_setup.qmd >}}
+
+# Study objectives and design
+
+## Objectives
+
+The primary objective was to characterise the dermatologic tolerability of the xanomeline transdermal therapeutic system over 24 weeks of treatment in patients with mild to moderate Alzheimer's disease.
+
+The secondary objective was to describe the effect of xanomeline on vital signs, expressed as change from baseline in systolic blood pressure at week 24.
+
+## Overall design
+
+The study was a randomised, double-blind, placebo-controlled, parallel-group study conducted at multiple sites.
+Eligible subjects were randomised in equal proportions to placebo, xanomeline low dose or xanomeline high dose, and were treated for 24 weeks.
+
+Assessments were scheduled at baseline and at weeks 2, 4, 6, 8, 12, 16, 20, 24 and 26.
+Adverse events were collected throughout the treatment period and for 30 days after the last dose.
+
+## Selection of the study population
+
+Subjects were eligible if they had a diagnosis of probable Alzheimer's disease of mild to moderate severity, were able to comply with the visit schedule, and had a caregiver able to support study participation.
+Subjects with clinically significant dermatologic conditions at the application site were excluded.
+
+## Disposition of subjects
+
+```{r}
+#| label: flow
+#| fig-cap: "Figure 14.1.1: Subject flow through the study [@consort2010]."
+#| fig-alt: "Flow diagram showing the number of subjects screened, randomised, treated and completing the study, with screen failures and discontinuations branching to the right."
+#| fig-height: 4
+
+fig_patient_flow(adsl)
+```

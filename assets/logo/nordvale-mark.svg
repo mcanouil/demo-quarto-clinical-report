@@ -1,0 +1,6 @@
+<!-- Nordvale Therapeutics logo. @license MIT @copyright 2026 Mickaël Canouil @author Mickaël Canouil -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Nordvale Therapeutics mark">
+  <rect width="64" height="64" rx="12" fill="#0E5C63"/>
+  <path d="M14 46 L24 24 L34 40 L44 20" fill="none" stroke="#FDFDFC" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="47" cy="18" r="5" fill="#C8862B"/>
+</svg>

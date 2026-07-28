@@ -1,0 +1,18 @@
+```{r}
+#| include: false
+
+source("R/brand.R")
+source("R/tlf.R")
+
+configure_brand_fonts()
+configure_gtsummary()
+
+adsl <- adam("adsl")
+adae <- adam("adae")
+adtte <- adam("adtte")
+adex <- adam("adex")
+advs <- adam("advs")
+adlb <- adam("adlb")
+
+population <- population_counts(adsl)
+```

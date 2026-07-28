@@ -1,0 +1,38 @@
+# Statistical methods
+
+Analyses follow the statistical principles of ICH E9 [@iche9] and were pre-specified in the Statistical Analysis Plan (SAP), finalised before database lock.
+This chapter narrates the analyses the SAP specified; sections below cite the corresponding SAP section.
+
+## Analysis populations
+
+The randomised population comprises all randomised subjects, analysed according to the treatment to which they were randomised; this is also the intention-to-treat (ITT) population, since every randomised subject received the assigned treatment (per SAP Section 3.1).
+The safety population comprises all randomised subjects who received at least one dose of study drug, analysed according to the treatment actually received (per SAP Section 3.2).
+The per-protocol (PP) population comprises safety-population subjects who completed the study without discontinuing early; no protocol deviation data are available for this demonstration, so the PP population is approximated as safety-population completers (per SAP Section 3.3).
+Safety analyses use the safety population; disposition and demographic summaries use the randomised population.
+The primary endpoint is analysed on the ITT population, with a supportive analysis repeated on the PP population.
+
+## Primary endpoint
+
+The primary endpoint is the time from first dose to the first dermatologic treatment-emergent adverse event, defined as an event with a system organ class of skin and subcutaneous tissue disorders that started on or after the first dose (per SAP Section 4.1).
+Subjects without such an event are censored at the last date known to be alive.
+
+Time to event is summarised by treatment group with Kaplan-Meier estimates of the cumulative incidence, medians and two-sided 95% confidence intervals [@kaplanmeier1958].
+Treatment groups are compared with a Cox proportional hazards model with treatment as the only covariate, taking placebo as the reference group [@cox1972] (per SAP Section 4.2).
+As a supportive analysis, the same Cox model is repeated on the per-protocol population to assess the sensitivity of the primary result to early discontinuation, and the treatment effect is further examined within sex and age-group subgroups (per SAP Section 4.3).
+
+## Secondary endpoint
+
+Change from baseline in systolic blood pressure at week 24 is analysed with an analysis of covariance model including treatment group as a factor and the baseline value as a covariate (per SAP Section 5.2).
+Least-squares means, their standard errors, and two-sided 95% confidence intervals are reported for each treatment group, together with the difference from placebo.
+
+## Handling of missing data
+
+No imputation is performed (per SAP Section 7).
+Analyses of continuous endpoints use the observed values at each visit, and time-to-event analyses use the censoring rule stated above.
+
+## Software
+
+All analyses were produced in R with the pharmaverse packages.
+Analysis data are the CDISC pilot ADaM datasets distributed in `pharmaverseadam`; the time-to-event dataset is derived with `admiral`.
+Summary tables are computed with `gtsummary`, which retains the underlying Analysis Results Datasets, and rendered with `gt`.
+Package versions are listed in @sec-reproducibility.

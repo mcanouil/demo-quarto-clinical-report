@@ -1,0 +1,16 @@
+.DS_Store
+*.log
+.quarto/
+**/*.quarto_ipynb
+**/*_files/
+/_book/
+/_doc/
+/_freeze/
+/_site/
+/data/
+
+/.quarto/
+
+/.luarc.json
+.kata.toml
+.kata.local.toml

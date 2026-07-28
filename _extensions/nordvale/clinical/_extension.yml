@@ -1,0 +1,50 @@
+title: Nordvale Clinical
+author: Mickaël Canouil
+version: 0.1.0
+quarto-required: ">=1.10.18"
+contributes:
+  formats:
+    common:
+      toc: true
+      toc-depth: 3
+      number-sections: true
+      lang: en-GB
+      execute:
+        echo: false
+        warning: false
+        message: false
+    typst:
+      template-partials:
+        - typst-template.typ
+        - typst-show.typ
+      filters:
+        - path: appendices.lua
+          at: post-quarto
+      citeproc: true
+      papersize: a4
+      margin:
+        x: 20mm
+        top: 28mm
+        bottom: 24mm
+      section-numbering: "1.1.1"
+      font-paths:
+        - _extensions/nordvale/clinical/fonts
+      fig-format: svg
+      fig-width: 6.5
+      fig-height: 4
+      keep-typ: false
+    html:
+      theme:
+        - cosmo
+        - brand
+        - clinical.scss
+      toc-location: left
+      toc-expand: 2
+      link-external-newwindow: true
+      code-tools: false
+      anchor-sections: true
+      fig-format: svg
+      fig-width: 7
+      fig-height: 4.5
+      filters:
+        - inline-svglite.lua

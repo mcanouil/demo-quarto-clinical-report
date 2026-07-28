@@ -1,0 +1,14 @@
+project:
+  pre-render: R/00-adam.R
+  execute-dir: project
+
+profile:
+  group:
+    - [book, doc]
+
+bibliography: references.bib
+
+knitr:
+  opts_chunk:
+    dev: svglite
+    fig.showtext: false

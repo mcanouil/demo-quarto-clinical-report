@@ -1,0 +1,27 @@
+{{< include /_setup.qmd >}}
+
+# Discussion and overall conclusions
+
+```{r}
+#| label: conclusion-numbers
+
+treated <- sum(adsl[["SAFFL"]] == "Y")
+with_derm <- dplyr::n_distinct(dplyr::filter(adae, DERMFL == "Y")[["USUBJID"]])
+serious <- dplyr::n_distinct(dplyr::filter(adae, AESER == "Y")[["USUBJID"]])
+```
+
+Over 24 weeks of double-blind treatment in `r treated` subjects with mild to moderate Alzheimer's disease, the dermatologic tolerability of the xanomeline transdermal therapeutic system was the dominant safety finding.
+`r with_derm` subjects reported at least one dermatologic treatment-emergent adverse event, and the events began earlier in both xanomeline groups than in the placebo group.
+
+Serious treatment-emergent adverse events were reported for `r serious` subjects, without a pattern suggesting a treatment-related excess.
+Laboratory and vital sign findings did not identify a new safety concern, and systolic blood pressure was unchanged relative to placebo at week 24.
+
+The results support the conclusion that dermatologic tolerability is the limiting factor for this formulation at the doses studied.
+Any further development of the transdermal route should address application-site tolerability, for example by modifying the adhesive system or the rotation schedule of application sites.
+
+::: {.callout-note appearance="simple"}
+
+This report is a demonstration of Quarto for regulated reporting.
+The conclusions describe the public CDISC pilot data used to build it and are not a statement about any real medicinal product.
+
+:::

@@ -1,0 +1,24 @@
+{{< include /_setup.qmd >}}
+
+# Demographic and baseline characteristics
+
+```{r}
+#| label: demographics
+
+tlf_demographics(adsl) |>
+  tbl_nordvale(
+    title = "Table 14.1.2: Demographic and baseline characteristics",
+    subtitle = "Randomised population",
+    source_note = "Continuous variables are summarised as mean (standard deviation); median [minimum, maximum]."
+  )
+```
+
+```{r}
+#| label: demographics-numbers
+
+age_mean <- mean(adsl[["AGE"]])
+female <- sum(adsl[["SEX"]] == "Female")
+```
+
+The treatment groups were comparable at baseline.
+The mean age was `r sprintf("%.1f", age_mean)` years and `r female` subjects (`r sprintf("%.1f%%", 100 * female / nrow(adsl))`) were female, with no clinically relevant imbalance between groups in age, sex, race or ethnicity.

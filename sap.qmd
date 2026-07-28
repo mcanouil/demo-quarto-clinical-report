@@ -1,0 +1,95 @@
+---
+title: "Statistical Analysis Plan"
+subtitle: "NVT-AD-3001: a 24-week, randomised, double-blind, placebo-controlled study of xanomeline transdermal therapeutic system in patients with mild to moderate Alzheimer's disease"
+output-file: "Statistical-Analysis-Plan"
+document-type: "Statistical Analysis Plan"
+report-version: "1.0"
+report-date: 2026-06-01
+status: final
+approvals:
+  - name: Study Statistician
+    role: Biostatistics
+  - name: Clinical Study Lead
+    role: Clinical Development
+revisions:
+  - version: "1.0"
+    date: 2026-06-01
+    summary: Finalised prior to database lock.
+---
+
+::: {.content-visible when-format="html"}
+
+::: {.clinical-disclaimer}
+
+{{< include _disclaimer.qmd >}}
+
+:::
+
+:::
+
+# Introduction
+
+This Statistical Analysis Plan (SAP) states the analysis populations and statistical methods for study NVT-AD-3001 prospectively, before database lock, per ICH E9 [@iche9].
+The Clinical Study Report (CSR) that follows database lock narrates the results of the analyses specified here; sections of the CSR methods chapter cross-reference the SAP sections below by number.
+
+# Study design and objectives
+
+The study objectives and design are as stated in the protocol and summarised in the CSR's study objectives and design chapter.
+This SAP covers only the statistical treatment of the primary and secondary endpoints, the safety evaluation, and the analysis populations that support them.
+
+# Analysis populations
+
+## Intention-to-treat population
+
+The intention-to-treat (ITT) population comprises all randomised subjects, analysed according to the treatment to which they were randomised.
+Since every randomised subject in this study received the assigned treatment, the ITT population and the randomised population coincide.
+
+## Safety population
+
+The safety population comprises all randomised subjects who received at least one dose of study drug, analysed according to the treatment actually received.
+
+## Per-protocol population
+
+The per-protocol (PP) population comprises safety-population subjects who complete the study without a major protocol deviation affecting the primary endpoint.
+Protocol deviations are adjudicated by the study team ahead of database lock; where deviation data are unavailable, the PP population defaults to safety-population completers.
+
+# Primary endpoint
+
+## Endpoint definition
+
+The primary endpoint is the time from first dose to the first dermatologic treatment-emergent adverse event, defined as an event with a system organ class of skin and subcutaneous tissue disorders that started on or after the first dose.
+Subjects without such an event are censored at the last date known to be alive.
+
+## Statistical method
+
+Time to event is summarised by treatment group with Kaplan-Meier estimates of the cumulative incidence, medians and two-sided 95% confidence intervals [@kaplanmeier1958].
+Treatment groups are compared with a Cox proportional hazards model with treatment as the only covariate, taking placebo as the reference group [@cox1972].
+This is the primary analysis and is conducted on the ITT population.
+
+## Supportive and subgroup analyses
+
+As a supportive analysis, the primary Cox model is repeated on the per-protocol population, to assess the sensitivity of the primary result to early discontinuation.
+As a further supportive analysis, the treatment effect on the primary endpoint is estimated within subgroups defined by sex and by age group (18-64, over 64), to assess consistency of the effect across those subgroups.
+Neither analysis is adjusted for multiplicity; both are descriptive and supportive of the primary analysis.
+
+# Secondary endpoint
+
+## Endpoint definition
+
+The secondary endpoint is change from baseline in systolic blood pressure at week 24.
+
+## Statistical method
+
+Change from baseline is analysed with an analysis of covariance model including treatment group as a factor and the baseline value as a covariate.
+Least-squares means, their standard errors, and two-sided 95% confidence intervals are reported for each treatment group, together with the difference from placebo.
+This analysis is conducted on the safety population.
+
+# Safety analyses
+
+Safety analyses are descriptive and conducted on the safety population: extent of exposure; incidence of treatment-emergent adverse events overall, by system organ class and preferred term, by maximum severity, and by relationship to study drug; serious adverse events and deaths; and shift from baseline to worst post-baseline reference-range category for selected laboratory analytes and vital signs.
+No formal hypothesis tests are planned for safety endpoints.
+
+# Handling of missing data
+
+No imputation is performed.
+Analyses of continuous endpoints use the observed values at each visit, and the time-to-event analysis uses the censoring rule stated in the primary endpoint section above.

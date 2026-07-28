@@ -1,0 +1,42 @@
+project:
+  type: book
+  output-dir: _book
+
+metadata-files:
+  - _metadata-csr.yml
+
+book:
+  title: "Clinical Study Report"
+  subtitle: "A 24-week, randomised, double-blind, placebo-controlled study of xanomeline transdermal therapeutic system in patients with mild to moderate Alzheimer's disease"
+  date: 2026-07-28
+  date-format: iso
+  favicon: assets/logo/nordvale-mark.svg
+  cover-image: assets/logo/nordvale-wordmark.svg
+  search: true
+  downloads: [pdf]
+  repo-url: https://github.com/mcanouil/demo-quarto-clinical-report
+  repo-actions: [source]
+  page-footer:
+    left: "Quarto demo by [Mickaël Canouil](https://github.com/mcanouil)."
+    right: "[MIT Licence](https://github.com/mcanouil/demo-quarto-clinical-report/blob/main/LICENSE)"
+  chapters:
+    - index.qmd
+    - sections/01-synopsis.qmd
+    - sections/02-ethics.qmd
+    - sections/03-design.qmd
+    - sections/04-methods.qmd
+    - sections/05-patients.qmd
+    - sections/06-demographics.qmd
+    - sections/07-efficacy.qmd
+    - sections/08-safety.qmd
+    - sections/09-conclusions.qmd
+    - sections/10-references.qmd
+  appendices:
+    - sections/appendix-a-tlf.qmd
+    - sections/appendix-b-reproducibility.qmd
+    - sections/appendix-c-adrg.qmd
+
+format:
+  clinical-html:
+    number-depth: 3
+  clinical-typst: default

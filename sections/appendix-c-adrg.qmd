@@ -1,0 +1,67 @@
+{{< include /_setup.qmd >}}
+
+# ADaM Reviewer's Guide {#sec-appendix-adrg}
+
+This appendix describes the analysis datasets behind this report, in the spirit of a CDISC ADaM Reviewer's Guide (ADRG): each dataset's structure, its key derived variables, and the population flags used to select analysis subsets.
+It is a narrative companion to the metadata excerpt in @sec-reproducibility, not a substitute for it.
+
+## Dataset overview
+
+```{r}
+#| label: adrg-overview
+
+tibble::tribble(
+  ~Dataset, ~Structure, ~`Key derived variables`,
+  "ADSL", "One record per subject", "TRT01P/TRT01A, SAFFL, ITTFL, PPROTFL, COMPFL, AGEGR1",
+  "ADAE", "One record per subject per adverse event", "TRTEMFL (subset to TRUE), RELFL, DERMFL",
+  "ADEX", "One record per subject", "AVAL (total exposure days), derived from EX",
+  "ADLB", "One record per subject per lab test per visit", "BNRIND, ANRIND (reference-range indicators)",
+  "ADTTE", "One record per subject per time-to-event parameter", "AVAL, CNSR, derived with admiral::derive_param_tte()",
+  "ADVS", "One record per subject per vital-signs test per visit", "BNRIND, ANRIND (reference-range indicators)"
+) |>
+  gt_nordvale() |>
+  gt::tab_header(title = gt::md("Analysis datasets used in this report"))
+```
+
+All six datasets derive from the CDISC pilot study (`CDISCPILOT01`) shipped in `pharmaverseadam`, restricted in `R/00-adam.R` to the three randomised treatment arms.
+ADTTE is not shipped by `pharmaverseadam` and is derived from ADSL and ADAE.
+
+## ADSL: Subject-level analysis dataset
+
+ADSL carries one record per randomised subject and the population flags that select analysis subsets throughout this report:
+
+- `SAFFL`: safety population, subjects who received at least one dose of study drug.
+- `ITTFL`: intention-to-treat population; every randomised subject is `"Y"`, since all received the assigned treatment.
+- `PPROTFL`: per-protocol population, approximated as safety-population subjects who completed the study, because no protocol deviation data ship with the pilot study.
+- `COMPFL`: completers, derived from `EOSSTT == "COMPLETED"`.
+
+`TRT01P` and `TRT01A` (planned and actual treatment for period 01) drive every by-treatment column in this report; they agree for every subject, since no subject crossed over between arms.
+
+## ADAE: Adverse events analysis dataset
+
+ADAE is restricted to treatment-emergent events (`TRTEMFL == "Y"`) reported by safety-population subjects.
+Two flags derived in `R/00-adam.R` are used beyond the standard ADaM variables:
+
+- `RELFL`: related to study drug, derived from `AEREL %in% c("PROBABLE", "POSSIBLE", "RELATED")`.
+- `DERMFL`: dermatologic event, derived from `AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS"`; this flag identifies the events contributing to the primary endpoint.
+
+## ADEX: Exposure analysis dataset
+
+ADEX carries one record per subject with total exposure duration (`AVAL`, parameter `TDURD`), restricted to the safety population.
+Table 14.3.1 in the safety evaluation chapter draws directly from this dataset without further derivation.
+
+## ADLB and ADVS: Laboratory and vital-signs analysis datasets
+
+ADLB and ADVS share the same structure: one record per subject per test per visit, restricted to the safety population, with a baseline reference-range indicator (`BNRIND`) carried onto every post-baseline record alongside that record's own indicator (`ANRIND`).
+This shared structure is what lets `R/tlf.R`'s `tlf_shift()` compute shift-from-baseline tables (Tables 14.3.6 through 14.3.8) identically for both domains, keyed only by `PARAM`.
+
+## ADTTE: Time-to-event analysis dataset
+
+ADTTE is derived, not sourced, since `pharmaverseadam` does not ship a time-to-event dataset for this study.
+`R/00-adam.R` builds it with `admiral::derive_param_tte()` from two sources:
+
+- An event source, the first dermatologic treatment-emergent adverse event per subject (`ASTDT`, one row per subject via `slice_min()`).
+- A censoring source, the subject's last date known to be alive (`LSTALVDT`), for subjects without a qualifying event.
+
+`AVAL` is the resulting time to event in days, and `CNSR` distinguishes events (`0`) from censoring (`1`).
+`TRT01P`, `TRT01A`, `SAFFL`, `PPROTFL`, `AGE`, `AGEGR1` and `SEX` are merged back from ADSL so that the primary and supportive analyses in the primary and secondary endpoints chapter need no further joins.

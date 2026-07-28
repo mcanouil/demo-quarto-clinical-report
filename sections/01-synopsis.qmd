@@ -1,0 +1,52 @@
+{{< include /_setup.qmd >}}
+
+# Synopsis
+
+```{r}
+#| label: synopsis
+
+synopsis <- tibble::tribble(
+  ~Item, ~Detail,
+  "Protocol number", "NVT-AD-3001",
+  "Study title", "A 24-week, randomised, double-blind, placebo-controlled study of xanomeline transdermal therapeutic system in patients with mild to moderate Alzheimer's disease",
+  "Sponsor", "Nordvale Therapeutics",
+  "Investigational product", "Xanomeline transdermal therapeutic system (TTS)",
+  "Study phase", "Phase 2",
+  "Indication", "Mild to moderate Alzheimer's disease",
+  "Study design", "Randomised, double-blind, placebo-controlled, three parallel groups",
+  "Treatment groups", "Placebo, xanomeline low dose (50 cm2), xanomeline high dose (75 cm2)",
+  "Planned duration of treatment", "24 weeks",
+  "Primary endpoint", "Time to first dermatologic treatment-emergent adverse event",
+  "Secondary endpoint", "Change from baseline in systolic blood pressure at week 24",
+  "Analysis populations", "Randomised population and safety population",
+  "Statistical methods", "Kaplan-Meier estimation and Cox proportional hazards for the primary endpoint; analysis of covariance for the secondary endpoint"
+)
+
+gt_nordvale(synopsis) |>
+  gt::cols_label(Item = "", Detail = "") |>
+  gt::cols_width(Item ~ gt::pct(28), Detail ~ gt::pct(72)) |>
+  gt::tab_style(
+    style = gt::cell_text(weight = "bold"),
+    locations = gt::cells_body(columns = "Item")
+  )
+```
+
+## Subject disposition and key results
+
+```{r}
+#| label: synopsis-numbers
+
+randomised <- nrow(adsl)
+treated <- sum(adsl[["SAFFL"]] == "Y")
+completed <- sum(adsl[["COMPFL"]] == "Y")
+with_teae <- dplyr::n_distinct(adae[["USUBJID"]])
+with_derm <- dplyr::n_distinct(dplyr::filter(adae, DERMFL == "Y")[["USUBJID"]])
+```
+
+A total of `r randomised` subjects were randomised and `r treated` received at least one dose of study drug.
+Of these, `r completed` subjects (`r sprintf("%.1f%%", 100 * completed / treated)`) completed the 24-week treatment period.
+
+At least one treatment-emergent adverse event was reported for `r with_teae` subjects (`r sprintf("%.1f%%", 100 * with_teae / treated)`), and `r with_derm` subjects (`r sprintf("%.1f%%", 100 * with_derm / treated)`) reported at least one dermatologic treatment-emergent adverse event.
+Dermatologic events occurred earlier and more frequently in both xanomeline groups than in the placebo group, which is consistent with the transdermal route of administration.
+
+No new safety signal was identified beyond the application-site and dermatologic events expected for this formulation.

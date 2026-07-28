@@ -1,0 +1,103 @@
+/*-- scss:defaults --*/
+
+$toc-font-size: 0.85rem !default;
+$h1-font-size: 1.6rem !default;
+$h2-font-size: 1.3rem !default;
+$h3-font-size: 1.1rem !default;
+
+/*-- scss:mixins --*/
+
+@mixin clinical-panel($accent) {
+  border-left: 4px solid $accent;
+  background-color: rgba($accent, 0.06);
+  padding: 0.9rem 1.1rem;
+  margin-block: 1.4rem;
+}
+
+/*-- scss:rules --*/
+
+.navbar {
+  border-bottom: 3px solid $primary;
+}
+
+h1,
+h2 {
+  border-bottom: 1px solid $tertiary;
+  padding-bottom: 0.25rem;
+}
+
+h1 {
+  border-bottom-color: $primary;
+}
+
+.clinical-cover {
+  @include clinical-panel($primary);
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.75rem 2rem;
+
+  dt {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $secondary;
+  }
+
+  dd {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+  }
+}
+
+.clinical-confidential {
+  @include clinical-panel($secondary);
+
+  font-size: 0.85rem;
+}
+
+.clinical-draft {
+  @include clinical-panel($warning);
+
+  font-weight: 600;
+}
+
+.clinical-disclaimer {
+  color: $secondary;
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.clinical-download {
+  display: inline-block;
+  margin-block: 1rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 0.3rem;
+  background-color: $primary;
+  color: $background;
+  text-decoration: none;
+
+  &:hover {
+    background-color: shade-color($primary, 15%);
+    color: $background;
+  }
+}
+
+figure figcaption,
+caption {
+  color: $secondary;
+  font-size: 0.85rem;
+}
+
+.gt_table {
+  margin-block: 1.5rem;
+}
+
+@media print {
+  .navbar,
+  .sidebar,
+  #quarto-margin-sidebar,
+  .clinical-download {
+    display: none !important;
+  }
+}

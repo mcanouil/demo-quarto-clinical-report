@@ -1,0 +1,31 @@
+{{< include /_setup.qmd >}}
+
+# Study patients
+
+## Disposition of subjects
+
+```{r}
+#| label: disposition
+
+tlf_disposition(adsl) |>
+  tbl_nordvale(
+    title = "Table 14.1.1: Subject disposition",
+    subtitle = "Randomised population",
+    source_note = "Percentages use the number of randomised subjects in each treatment group as denominator."
+  )
+```
+
+```{r}
+#| label: disposition-numbers
+
+discontinued <- sum(adsl[["COMPFL"]] == "N")
+deaths <- sum(!is.na(adsl[["DTHFL"]]) & adsl[["DTHFL"]] == "Y")
+```
+
+`r discontinued` subjects discontinued the study before the end of the treatment period, and `r deaths` deaths were reported.
+Discontinuation was more frequent in the xanomeline groups than in the placebo group, driven mainly by adverse events at the application site.
+
+## Protocol deviations
+
+Protocol deviations were reviewed before database lock and classified as important or not important.
+No deviation was considered to affect the interpretation of the primary endpoint.

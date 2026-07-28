@@ -1,0 +1,117 @@
+meta:
+  name:
+    full: Nordvale Therapeutics
+    short: Nordvale
+  link:
+    home: https://example.com/nordvale
+
+color:
+  palette:
+    teal: "#0E5C63"
+    deep: "#083B40"
+    slate: "#3E5060"
+    mist: "#E7EDEE"
+    amber: "#C8862B"
+    moss: "#2E7D4F"
+    brick: "#A8322D"
+    ink: "#16202A"
+    paper: "#FDFDFC"
+  foreground: ink
+  background: paper
+  primary: teal
+  secondary: slate
+  tertiary: mist
+  success: moss
+  info: teal
+  warning: amber
+  danger: brick
+
+typography:
+  fonts:
+    - family: Source Sans 3
+      source: file
+      files:
+        - path: _extensions/nordvale/clinical/fonts/SourceSans3-Regular.otf
+          weight: 400
+          style: normal
+        - path: _extensions/nordvale/clinical/fonts/SourceSans3-It.otf
+          weight: 400
+          style: italic
+        - path: _extensions/nordvale/clinical/fonts/SourceSans3-Semibold.otf
+          weight: 600
+          style: normal
+        - path: _extensions/nordvale/clinical/fonts/SourceSans3-SemiboldIt.otf
+          weight: 600
+          style: italic
+        - path: _extensions/nordvale/clinical/fonts/SourceSans3-Bold.otf
+          weight: 700
+          style: normal
+        - path: _extensions/nordvale/clinical/fonts/SourceSans3-BoldIt.otf
+          weight: 700
+          style: italic
+    - family: Source Serif 4
+      source: file
+      files:
+        - path: _extensions/nordvale/clinical/fonts/SourceSerif4-Regular.otf
+          weight: 400
+          style: normal
+        - path: _extensions/nordvale/clinical/fonts/SourceSerif4-It.otf
+          weight: 400
+          style: italic
+        - path: _extensions/nordvale/clinical/fonts/SourceSerif4-Semibold.otf
+          weight: 600
+          style: normal
+        - path: _extensions/nordvale/clinical/fonts/SourceSerif4-SemiboldIt.otf
+          weight: 600
+          style: italic
+        - path: _extensions/nordvale/clinical/fonts/SourceSerif4-Bold.otf
+          weight: 700
+          style: normal
+        - path: _extensions/nordvale/clinical/fonts/SourceSerif4-BoldIt.otf
+          weight: 700
+          style: italic
+    - family: JetBrains Mono
+      source: file
+      files:
+        - path: _extensions/nordvale/clinical/fonts/JetBrainsMono-Regular.ttf
+          weight: 400
+          style: normal
+        - path: _extensions/nordvale/clinical/fonts/JetBrainsMono-Italic.ttf
+          weight: 400
+          style: italic
+        - path: _extensions/nordvale/clinical/fonts/JetBrainsMono-Bold.ttf
+          weight: 700
+          style: normal
+        - path: _extensions/nordvale/clinical/fonts/JetBrainsMono-BoldItalic.ttf
+          weight: 700
+          style: italic
+  base:
+    family: Source Sans 3
+    weight: 400
+    line-height: 1.5
+  headings:
+    family: Source Serif 4
+    weight: 600
+    color: primary
+    line-height: 1.2
+  monospace:
+    family: JetBrains Mono
+    size: 0.85em
+  link:
+    color: primary
+    decoration: underline
+
+logo:
+  images:
+    mark:
+      path: assets/logo/nordvale-mark.svg
+      alt: Nordvale Therapeutics mark
+    wordmark:
+      path: assets/logo/nordvale-wordmark.svg
+      alt: Nordvale Therapeutics
+    wordmark-reverse:
+      path: assets/logo/nordvale-wordmark-reverse.svg
+      alt: Nordvale Therapeutics
+  small: mark
+  medium: wordmark
+  large: wordmark

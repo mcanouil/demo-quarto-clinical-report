@@ -1,0 +1,147 @@
+{{< include /_setup.qmd >}}
+
+# Reproducibility {#sec-reproducibility}
+
+## Source data
+
+The analysis datasets are the CDISC pilot study datasets (study identifier `CDISCPILOT01`) distributed in the `pharmaverseadam` package.
+`R/00-adam.R` reads those datasets, restricts them to the randomised treatment groups, derives the treatment-emergent flags used throughout the report, and derives the time-to-event dataset with `admiral::derive_param_tte()`.
+
+## Metadata excerpt (define.xml style)
+
+A define.xml documents every submitted dataset and variable: its name, label, data type and, where applicable, the controlled terminology codelist it draws from.
+Tools such as `metacore` build a validated metadata object from that specification; the excerpt below hand-curates a subset of ADSL variables used in this report in the same shape, without generating or validating a full define.xml.
+
+```{r}
+#| label: define-excerpt
+
+tibble::tribble(
+  ~Dataset, ~Variable, ~Label, ~Type, ~Codelist,
+  "ADSL", "USUBJID", "Unique Subject Identifier", "text", "",
+  "ADSL", "TRT01P", "Planned Treatment for Period 01", "text", "TRT01P",
+  "ADSL", "TRT01A", "Actual Treatment for Period 01", "text", "TRT01P",
+  "ADSL", "AGE", "Age", "integer", "",
+  "ADSL", "AGEGR1", "Pooled Age Group 1", "text", "AGEGR1",
+  "ADSL", "SEX", "Sex", "text", "SEX",
+  "ADSL", "RACE", "Race", "text", "RACE",
+  "ADSL", "SAFFL", "Safety Population Flag", "text", "NY",
+  "ADSL", "ITTFL", "Intent-To-Treat Population Flag", "text", "NY",
+  "ADSL", "PPROTFL", "Per-Protocol Population Flag", "text", "NY",
+  "ADSL", "COMPFL", "Completers Population Flag", "text", "NY",
+  "ADSL", "TRTDURD", "Total Treatment Duration (Days)", "integer", ""
+) |>
+  gt_nordvale() |>
+  gt::tab_header(
+    title = gt::md("Metadata excerpt: ADSL variables used in this report"),
+    subtitle = gt::md("define.xml-style excerpt, hand-curated")
+  ) |>
+  gt::tab_source_note(
+    gt::md("Illustrative excerpt only, covering the ADSL variables referenced elsewhere in this report; not a validated define.xml. `NY` is the CDISC controlled terminology codelist for No/Yes flags.")
+  )
+```
+
+## Analysis results traceability
+
+Every summary table in this report is computed by `gtsummary`, which retains the Analysis Results Dataset (ARD) behind each statistic, following the CDISC Analysis Results Data standard.
+Each table's ARD can be recovered from its table object, and `cards::bind_ard()` combines the ARDs from several tables into a single dataset, which is the mechanism used for quality control of the numbers reported here.
+
+```{r}
+#| label: ard-example
+#| echo: true
+
+disposition_ard <- gtsummary::gather_ard(tlf_disposition(adsl))[[1L]]
+demographics_ard <- gtsummary::gather_ard(tlf_demographics(adsl))[[1L]]
+ae_overview_ard <- gtsummary::gather_ard(tlf_ae_overview(adae, adsl))[[1L]]
+
+ard <- cards::bind_ard(disposition_ard, demographics_ard, ae_overview_ard, .quiet = TRUE)
+head(as.data.frame(ard)[, c("variable", "stat_name", "stat")], 8)
+```
+
+The combined ARD traces every statistic back to the table (Table 14.1.1, Table 14.1.2 or Table 14.3.2) and variable that produced it:
+
+```{r}
+#| label: ard-by-variable
+#| echo: true
+
+as.data.frame(dplyr::count(ard, variable, name = "n_rows"))
+```
+
+## Session information
+
+```{r}
+#| label: session-info
+
+sessioninfo::session_info(pkgs = "attached")$packages |>
+  as.data.frame() |>
+  dplyr::filter(package %in% c(
+    "admiral", "cards", "cardx", "dplyr", "ggplot2", "ggsurvfit",
+    "gt", "gtsummary", "pharmaverseadam", "survival"
+  )) |>
+  dplyr::transmute(
+    Package = package,
+    Version = loadedversion,
+    Source = source
+  ) |>
+  gt_nordvale() |>
+  gt::tab_header(title = gt::md("Package versions used for this report"))
+```
+
+Key packages are cited in the reference list: admiral [@admiral], gtsummary [@gtsummary], survival [@survival], ggsurvfit [@ggsurvfit], gt [@gt].
+
+## Table shells
+
+Table shells fix column layout, statistics and placeholder text at SAP sign-off, before database lock.
+The final report differs from the shell only in the numbers, not in structure.
+The mockup below is the pre-lock shell for Table 14.2.1; the populated table that follows is the same table after database lock, reproduced here for direct comparison (it also appears as Table 14.2.1 in the primary and secondary endpoints chapter).
+
+```{r}
+#| label: shell-tte
+
+tibble::tibble(
+  `Treatment group` = c("Placebo", "Xanomeline low dose", "Xanomeline high dose"),
+  `Subjects` = c("XX", "XX", "XX"),
+  `Subjects with an event` = c("XX (XX.X%)", "XX (XX.X%)", "XX (XX.X%)"),
+  `Median time to event (days)` = c("XXX (XXX, XXX)", "XXX (XXX, XXX)", "XXX (XXX, XXX)"),
+  `Hazard ratio (95% CI)` = c("Reference", "X.XX (X.XX, X.XX)", "X.XX (X.XX, X.XX)"),
+  `p-value` = c("", "X.XXX", "X.XXX")
+) |>
+  gt_nordvale() |>
+  gt::tab_header(
+    title = gt::md("Table 14.2.1 (shell): Time to first dermatologic treatment-emergent adverse event"),
+    subtitle = gt::md("Safety population &mdash; pre-database-lock template")
+  ) |>
+  gt::tab_source_note(
+    gt::md("`XX` marks cells populated only after database lock. Column layout and statistics are fixed at SAP sign-off.")
+  )
+```
+
+```{r}
+#| label: shell-tte-final
+
+tlf_tte_summary(adtte) |>
+  gt_nordvale() |>
+  gt::tab_header(
+    title = gt::md("Table 14.2.1: Time to first dermatologic treatment-emergent adverse event"),
+    subtitle = gt::md("Safety population")
+  ) |>
+  gt::tab_source_note(
+    gt::md("Medians and confidence intervals are Kaplan-Meier estimates. Hazard ratios come from a Cox proportional hazards model with treatment as the only covariate and placebo as the reference group.")
+  )
+```
+
+```{r}
+#| label: quarto-version
+#| echo: true
+
+quarto_version <- system2("quarto", "--version", stdout = TRUE, stderr = TRUE)
+typst_version <- system2("quarto", c("typst", "--version"), stdout = TRUE, stderr = TRUE)
+
+cat(
+  "R:     ", R.version.string,
+  "\nQuarto:", quarto_version,
+  "\nTypst: ", sub("^typst ", "", typst_version)
+)
+```
+
+The exact package versions are pinned in `renv.lock`.
+Running `renv::restore()` followed by `quarto render` reproduces this report from a clean checkout.

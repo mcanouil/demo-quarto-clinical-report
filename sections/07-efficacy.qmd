@@ -1,0 +1,92 @@
+{{< include /_setup.qmd >}}
+
+# Primary and secondary endpoints
+
+## Primary endpoint: time to first dermatologic event
+
+```{r}
+#| label: tte
+
+tlf_tte_summary(adtte) |>
+  gt_nordvale() |>
+  gt::tab_header(
+    title = gt::md("Table 14.2.1: Time to first dermatologic treatment-emergent adverse event"),
+    subtitle = gt::md("Safety population")
+  ) |>
+  gt::tab_source_note(
+    gt::md("Medians and confidence intervals are Kaplan-Meier estimates. Hazard ratios come from a Cox proportional hazards model with treatment as the only covariate and placebo as the reference group.")
+  )
+```
+
+```{r}
+#| label: km
+#| fig-cap: "Figure 14.2.1: Cumulative incidence of the first dermatologic treatment-emergent adverse event, safety population."
+#| fig-alt: "Kaplan-Meier cumulative incidence curves by treatment group, with confidence bands and a table of subjects at risk. Both xanomeline groups rise faster than placebo."
+#| fig-height: 4.5
+
+fig_km(adtte)
+```
+
+Both xanomeline groups reached a higher cumulative incidence of dermatologic events than placebo, and the separation appeared within the first weeks of treatment.
+The hazard ratios in Table 14.2.1 quantify that difference; the confidence intervals exclude one for both dose groups.
+
+### Supportive analysis: per-protocol population
+
+```{r}
+#| label: tte-pp
+
+adtte |>
+  dplyr::filter(PPROTFL == "Y") |>
+  tlf_tte_summary() |>
+  gt_nordvale() |>
+  gt::tab_header(
+    title = gt::md("Table 14.2.1.1: Time to first dermatologic treatment-emergent adverse event (supportive analysis)"),
+    subtitle = gt::md("Per-protocol population")
+  ) |>
+  gt::tab_source_note(
+    gt::md("Medians and confidence intervals are Kaplan-Meier estimates. Hazard ratios come from a Cox proportional hazards model with treatment as the only covariate and placebo as the reference group. The per-protocol population is restricted to safety-population subjects who completed the study.")
+  )
+```
+
+The per-protocol result in Table 14.2.1.1 is consistent in direction and magnitude with the intention-to-treat result in Table 14.2.1, supporting the primary conclusion.
+
+### Subgroup analysis
+
+```{r}
+#| label: forest
+#| fig-cap: "Figure 14.2.3: Hazard ratio for the primary endpoint by age group and sex, safety population."
+#| fig-alt: "Forest plot of hazard ratios and 95% confidence intervals for xanomeline (any dose) versus placebo, shown overall and within sex and age-group subgroups. All point estimates fall to the right of the line of no effect."
+#| fig-height: 4
+
+fig_forest_subgroup(adtte)
+```
+
+The treatment effect on the primary endpoint was consistent across sex and age-group subgroups, with no confidence interval crossing the line of no effect.
+
+## Secondary endpoint: change in systolic blood pressure
+
+```{r}
+#| label: ancova
+
+tlf_vitals_ancova(advs) |>
+  gt_nordvale() |>
+  gt::tab_header(
+    title = gt::md("Table 14.2.2: Change from baseline in systolic blood pressure at week 24"),
+    subtitle = gt::md("Safety population")
+  ) |>
+  gt::tab_source_note(
+    gt::md("Least-squares means from an analysis of covariance model with treatment group as a factor and the baseline value as a covariate.")
+  )
+```
+
+```{r}
+#| label: vitals
+#| fig-cap: "Figure 14.2.2: Mean systolic blood pressure by visit and treatment group, safety population."
+#| fig-alt: "Line chart of mean systolic blood pressure by scheduled visit for each treatment group, with error bars showing the standard error."
+#| fig-height: 4
+
+fig_vitals_profile(advs)
+```
+
+Mean systolic blood pressure remained stable across the treatment period in all three groups.
+The differences from placebo at week 24 were small and their confidence intervals included zero, so no treatment effect on systolic blood pressure was demonstrated.

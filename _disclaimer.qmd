@@ -1,0 +1,3 @@
+Nordvale Therapeutics is a fictional sponsor.
+This {{< meta document-type >}} is a Quarto demonstration built from the public CDISC pilot data shipped with `pharmaverseadam`, and is not a regulatory submission.
+It was built by [Mickaël Canouil](https://github.com/mcanouil) ([source](https://github.com/mcanouil/demo-quarto-clinical-report)).

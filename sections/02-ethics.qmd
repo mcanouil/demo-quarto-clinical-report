@@ -1,0 +1,19 @@
+# Ethics and study administration
+
+## Independent ethics committee
+
+The protocol, the informed consent form and all subject-facing material were reviewed and approved by the independent ethics committee or institutional review board responsible for each participating site before any subject was enrolled.
+Substantial amendments were submitted for approval before implementation.
+
+## Ethical conduct of the study
+
+The study was conducted in accordance with the ethical principles of the Declaration of Helsinki, the ICH guideline for Good Clinical Practice, and applicable local regulatory requirements.
+
+## Subject information and consent
+
+Written informed consent was obtained from every subject, or from a legally acceptable representative where the subject was unable to provide consent, before any study-specific procedure was performed.
+
+## Study administrative structure
+
+Study conduct was overseen by the sponsor's clinical development team, with data management, statistical programming and medical writing performed by the sponsor.
+Statistical analyses reported here were produced with the open-source R packages listed in @sec-reproducibility.

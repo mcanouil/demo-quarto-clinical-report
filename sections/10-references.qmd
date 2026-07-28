@@ -1,0 +1,16 @@
+# Reference list
+
+::: {#refs}
+:::
+
+::: {.content-visible when-profile="doc"}
+
+```{=typst}
+// Letter the appendices that follow, as Quarto already does for the HTML output.
+// The book profile handles this in the clinical extension, where the appendices are
+// nested under the Appendices divider.
+#counter(heading).update(0)
+#set heading(numbering: "A.1.1")
+```
+
+:::

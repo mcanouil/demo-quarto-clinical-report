@@ -1,0 +1,25 @@
+sponsor: Nordvale Therapeutics
+protocol: NVT-AD-3001
+compound: Xanomeline transdermal therapeutic system
+phase: Phase 2
+indication: Mild to moderate Alzheimer's disease
+confidentiality: |
+  This document contains confidential information belonging to Nordvale Therapeutics.
+  Except as may be otherwise agreed in writing, by accepting or reviewing this document
+  you agree to hold this information in confidence and not to disclose it to others,
+  nor to use it for unauthorised purposes.
+disclaimer: |
+  Nordvale Therapeutics is a fictional sponsor. This report is a Quarto demonstration
+  built from the public CDISC pilot data shipped with pharmaverseadam, and is not a
+  regulatory submission. It was built by Mickaël Canouil
+  (github.com/mcanouil/demo-quarto-clinical-report), who is not an author of the
+  fictional study report.
+
+cover-logo: wordmark-reverse
+
+# document-type, report-version, report-date, status, approvals and revisions
+# are per document family, not here: putting them in this shared, always-
+# merged file would concatenate list values (approvals, revisions) across
+# companion documents instead of replacing them. The CSR (book and single
+# document) opts into its own copy via `metadata-files: [_metadata-csr.yml]`;
+# sap.qmd sets its own directly, since it is a different document family.

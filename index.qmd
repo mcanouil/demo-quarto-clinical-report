@@ -1,0 +1,74 @@
+# Report information {.unnumbered}
+
+::: {.content-visible when-format="html"}
+
+::: {.clinical-cover}
+
+Protocol
+: NVT-AD-3001
+
+Compound
+: Xanomeline transdermal therapeutic system
+
+Study phase
+: Phase 2
+
+Indication
+: Mild to moderate Alzheimer's disease
+
+Sponsor
+: Nordvale Therapeutics
+
+Report version
+: 1.0
+
+Report date
+: 2026-07-28
+
+Status
+: Draft
+
+:::
+
+::: {.clinical-draft}
+
+This document is a draft and is not for regulatory submission.
+
+:::
+
+## Available renderings
+
+The report and its companion Statistical Analysis Plan are rendered from one project, each in both formats below.
+
+| Output | Format |
+| --- | --- |
+| [Book](index.html) | HTML site, one page per section. |
+| [Book](Clinical-Study-Report.pdf) | Typst PDF, chapters in one file. |
+| [Single document](single/Clinical-Study-Report.html) | HTML, the whole report on one page. |
+| [Single document](single/Clinical-Study-Report.pdf) | Typst PDF, rendered from `csr.qmd`. |
+| [Statistical Analysis Plan](single/Statistical-Analysis-Plan.html) | HTML, the companion SAP rendered from `sap.qmd`. |
+| [Statistical Analysis Plan](single/Statistical-Analysis-Plan.pdf) | Typst PDF, the companion SAP rendered from `sap.qmd`. |
+
+[Download the report as PDF](Clinical-Study-Report.pdf){.clinical-download}
+
+::: {.clinical-confidential}
+
+This document contains confidential information belonging to Nordvale Therapeutics.
+Except as may be otherwise agreed in writing, by accepting or reviewing this document you agree to hold this information in confidence and not to disclose it to others, nor to use it for unauthorised purposes.
+
+:::
+
+::: {.clinical-disclaimer}
+
+{{< include _disclaimer.qmd >}}
+
+:::
+
+:::
+
+::: {.content-visible when-format="typst"}
+
+The report that follows summarises the conduct, efficacy and safety results of study NVT-AD-3001.
+It follows the structure of ICH E3 [@iche3], abbreviated to the sections that carry analysis results.
+
+:::

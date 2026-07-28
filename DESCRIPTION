@@ -1,0 +1,38 @@
+Type: Project
+Package: demo.quarto.clinical.report
+Title: Branded Clinical Study Report in Quarto
+Version: 0.1.0
+Authors@R: c(
+    person(
+      given = "Mickaël",
+      family = "Canouil",
+      role = c("aut", "cre"),
+      email = "pro@mickael.canouil.dev",
+      comment = c(ORCID = "0000-0002-3396-4549")
+    )
+  )
+Description: Declares the R dependencies of the clinical study report project.
+    renv uses this file as the single source of truth in explicit snapshot mode.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Imports:
+    admiral,
+    broom,
+    dplyr,
+    emmeans,
+    ggplot2,
+    ggsurvfit,
+    gt,
+    gtsummary,
+    jsonlite,
+    knitr,
+    pharmaverseadam,
+    rmarkdown,
+    scales,
+    sessioninfo,
+    stringr,
+    survival,
+    svglite,
+    systemfonts,
+    tibble,
+    yaml

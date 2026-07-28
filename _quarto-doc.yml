@@ -1,0 +1,11 @@
+project:
+  type: default
+  output-dir: _doc
+  render:
+    - csr.qmd
+    - sap.qmd
+
+format:
+  clinical-html:
+    embed-resources: false
+  clinical-typst: default
