@@ -124,7 +124,11 @@
     ]
   }
 
-  set table(inset: 5pt, stroke: none)
+  // Typst centres figures but not tables. `align: left` pins the default cell
+  // alignment so the surrounding `align(center, ...)` does not leak into cells;
+  // the explicit per-column `align:` tuple gt emits still wins.
+  set table(inset: 5pt, stroke: none, align: left)
+  show table: it => align(center, it)
   show figure.caption: set text(size: 0.9em, fill: muted)
   show link: set text(fill: primary)
 
