@@ -89,6 +89,14 @@ caption {
   font-size: 0.85rem;
 }
 
+// Figures are svglite SVGs inlined by `inline-svglite.lua`, and `fig-align` is
+// not honoured for figures that are not cross-referenced, so centre them here
+// to match the Typst output.
+figure > svg {
+  display: block;
+  margin-inline: auto;
+}
+
 .gt_table {
   margin-block: 1.5rem;
 }
