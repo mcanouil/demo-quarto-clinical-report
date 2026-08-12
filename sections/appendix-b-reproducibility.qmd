@@ -28,6 +28,7 @@ tibble::tribble(
   "ADSL", "ITTFL", "Intent-To-Treat Population Flag", "text", "NY",
   "ADSL", "PPROTFL", "Per-Protocol Population Flag", "text", "NY",
   "ADSL", "COMPFL", "Completers Population Flag", "text", "NY",
+  "ADSL", "DCSREAS", "Reason for Discontinuation from Study", "text", "",
   "ADSL", "TRTDURD", "Total Treatment Duration (Days)", "integer", ""
 ) |>
   gt_nordvale() |>
@@ -57,7 +58,7 @@ ard <- cards::bind_ard(disposition_ard, demographics_ard, ae_overview_ard, .quie
 head(as.data.frame(ard)[, c("variable", "stat_name", "stat")], 8)
 ```
 
-The combined ARD traces every statistic back to the table (Table 14.1.1, Table 14.1.2 or Table 14.3.2) and variable that produced it:
+The combined ARD traces every statistic back to the table (@tbl-disposition, @tbl-demographics or @tbl-ae-overview) and variable that produced it:
 
 ```{r}
 #| label: ard-by-variable
@@ -92,42 +93,56 @@ Key packages are cited in the reference list: admiral [@admiral], gtsummary [@gt
 
 Table shells fix column layout, statistics and placeholder text at SAP sign-off, before database lock.
 The final report differs from the shell only in the numbers, not in structure.
-The mockup below is the pre-lock shell for Table 14.2.1; the populated table that follows is the same table after database lock, reproduced here for direct comparison (it also appears as Table 14.2.1 in the primary and secondary endpoints chapter).
+The mockup in @tbl-tte-shell is the pre-lock shell for @tbl-tte; the populated table in @tbl-tte-locked is the same table after database lock, reproduced here for direct comparison.
+
+::: {#tbl-tte-shell}
 
 ```{r}
 #| label: shell-tte
 
-tibble::tibble(
-  `Treatment group` = c("Placebo", "Xanomeline low dose", "Xanomeline high dose"),
+shell <- tibble::tibble(
+  `Treatment group` = c(
+    "Placebo",
+    "Xanomeline low dose",
+    "Xanomeline high dose"
+  ),
   `Subjects` = c("XX", "XX", "XX"),
   `Subjects with an event` = c("XX (XX.X%)", "XX (XX.X%)", "XX (XX.X%)"),
-  `Median time to event (days)` = c("XXX (XXX, XXX)", "XXX (XXX, XXX)", "XXX (XXX, XXX)"),
-  `Hazard ratio (95% CI)` = c("Reference", "X.XX (X.XX, X.XX)", "X.XX (X.XX, X.XX)"),
+  `Median time to event (days)` = c(
+    "XXX (XXX, XXX)",
+    "XXX (XXX, XXX)",
+    "XXX (XXX, XXX)"
+  ),
+  `Hazard ratio (95% CI)` = c(
+    "Reference",
+    "X.XX (X.XX, X.XX)",
+    "X.XX (X.XX, X.XX)"
+  ),
   `p-value` = c("", "X.XXX", "X.XXX")
-) |>
-  gt_nordvale() |>
-  gt::tab_header(
-    title = gt::md("Table 14.2.1 (shell): Time to first dermatologic treatment-emergent adverse event"),
-    subtitle = gt::md("Safety population &mdash; pre-database-lock template")
-  ) |>
-  gt::tab_source_note(
-    gt::md("`XX` marks cells populated only after database lock. Column layout and statistics are fixed at SAP sign-off.")
-  )
+)
+
+tlf_output(
+  shell,
+  "tte",
+  source_note = "`XX` marks cells populated only after database lock. Column layout and statistics are fixed at SAP sign-off."
+)
 ```
+
+Shell for `{r} tlf_caption("tte")` Pre-database-lock template.
+
+:::
+
+::: {#tbl-tte-locked}
 
 ```{r}
 #| label: shell-tte-final
 
-tlf_tte_summary(adtte) |>
-  gt_nordvale() |>
-  gt::tab_header(
-    title = gt::md("Table 14.2.1: Time to first dermatologic treatment-emergent adverse event"),
-    subtitle = gt::md("Safety population")
-  ) |>
-  gt::tab_source_note(
-    gt::md("Medians and confidence intervals are Kaplan-Meier estimates. Hazard ratios come from a Cox proportional hazards model with treatment as the only covariate and placebo as the reference group.")
-  )
+tlf_output(tlf_tte_summary(adtte), "tte")
 ```
+
+Populated after database lock. `{r} tlf_caption("tte")`
+
+:::
 
 ```{r}
 #| label: quarto-version

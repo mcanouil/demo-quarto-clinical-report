@@ -23,11 +23,16 @@ Subjects with clinically significant dermatologic conditions at the application 
 
 ## Disposition of subjects
 
+::: {#fig-patient-flow}
+
 ```{r}
 #| label: flow
-#| fig-cap: "Figure 14.1.1: Subject flow through the study [@consort2010]."
-#| fig-alt: "Flow diagram showing the number of subjects screened, randomised, treated and completing the study, with screen failures and discontinuations branching to the right."
+#| fig-alt: "Flow diagram showing the number of subjects screened, randomised, treated and completing the study, with subjects not randomised, not treated and discontinuing branching to the right."
 #| fig-height: 4
 
-fig_patient_flow(adsl)
+fig_patient_flow(counts)
 ```
+
+`{r} tlf_caption("patient_flow")`
+
+:::

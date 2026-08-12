@@ -42,7 +42,8 @@ This SAP covers only the statistical treatment of the primary and secondary endp
 ## Intention-to-treat population
 
 The intention-to-treat (ITT) population comprises all randomised subjects, analysed according to the treatment to which they were randomised.
-Since every randomised subject in this study received the assigned treatment, the ITT population and the randomised population coincide.
+Since every randomised subject in this study receives at least one dose of study drug, the ITT population and the randomised population contain the same subjects.
+Subjects whose actual treatment differs from their planned treatment remain in the ITT population under their planned treatment.
 
 ## Safety population
 
@@ -51,7 +52,7 @@ The safety population comprises all randomised subjects who received at least on
 ## Per-protocol population
 
 The per-protocol (PP) population comprises safety-population subjects who complete the study without a major protocol deviation affecting the primary endpoint.
-Protocol deviations are adjudicated by the study team ahead of database lock; where deviation data are unavailable, the PP population defaults to safety-population completers.
+Protocol deviations are adjudicated by the study team ahead of database lock; where deviation data are unavailable, the PP population defaults to safety-population completers, which excludes subjects who discontinued for a protocol violation since they are by definition not completers.
 
 # Primary endpoint
 
@@ -59,6 +60,7 @@ Protocol deviations are adjudicated by the study team ahead of database lock; wh
 
 The primary endpoint is the time from first dose to the first dermatologic treatment-emergent adverse event, defined as an event with a system organ class of skin and subcutaneous tissue disorders that started on or after the first dose.
 Subjects without such an event are censored at the last date known to be alive.
+The endpoint is derived from adverse event data, so it is a safety endpoint analysed with efficacy methods; it serves as the primary endpoint of this demonstration because the underlying public data carry no efficacy measure.
 
 ## Statistical method
 
@@ -82,14 +84,19 @@ The secondary endpoint is change from baseline in systolic blood pressure at wee
 
 Change from baseline is analysed with an analysis of covariance model including treatment group as a factor and the baseline value as a covariate.
 Least-squares means, their standard errors, and two-sided 95% confidence intervals are reported for each treatment group, together with the difference from placebo.
+The two comparisons against placebo are not adjusted for multiplicity, since the secondary endpoint is descriptive.
+Blood pressure is measured in three postures, each with its own baseline; the supine measurement is used, so each subject contributes one observation.
 This analysis is conducted on the safety population.
 
 # Safety analyses
 
-Safety analyses are descriptive and conducted on the safety population: extent of exposure; incidence of treatment-emergent adverse events overall, by system organ class and preferred term, by maximum severity, and by relationship to study drug; serious adverse events and deaths; and shift from baseline to worst post-baseline reference-range category for selected laboratory analytes and vital signs.
+Safety analyses are descriptive and conducted on the safety population: extent of exposure; prior and concomitant medications; incidence of treatment-emergent adverse events overall, by system organ class and preferred term, by maximum severity, and by relationship to study drug; serious adverse events and deaths; shift from baseline to worst post-baseline reference-range category for selected laboratory analytes, for vital signs and for the QTcF interval; and a screen of the laboratory data against the aminotransferase and bilirubin criteria for potential drug-induced liver injury.
+Adverse event, concomitant medication and medical history tables report the terms reached by at least 5% of the subjects in any one treatment group.
+Medical history is a baseline characteristic and is summarised on the randomised population by planned treatment.
 No formal hypothesis tests are planned for safety endpoints.
 
 # Handling of missing data
 
 No imputation is performed.
-Analyses of continuous endpoints use the observed values at each visit, and the time-to-event analysis uses the censoring rule stated in the primary endpoint section above.
+Analyses of continuous endpoints use the observed values at each visit, so the analysis of covariance at week 24 is restricted to the subjects with both a baseline and a week 24 value.
+The time-to-event analysis uses the censoring rule stated in the primary endpoint section above.

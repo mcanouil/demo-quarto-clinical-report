@@ -5,15 +5,18 @@ This chapter narrates the analyses the SAP specified; sections below cite the co
 
 ## Analysis populations
 
-The randomised population comprises all randomised subjects, analysed according to the treatment to which they were randomised; this is also the intention-to-treat (ITT) population, since every randomised subject received the assigned treatment (per SAP Section 3.1).
+The randomised population comprises all randomised subjects, analysed according to the treatment to which they were randomised; this is also the intention-to-treat (ITT) population, since every randomised subject received at least one dose of study drug (per SAP Section 3.1).
 The safety population comprises all randomised subjects who received at least one dose of study drug, analysed according to the treatment actually received (per SAP Section 3.2).
-The per-protocol (PP) population comprises safety-population subjects who completed the study without discontinuing early; no protocol deviation data are available for this demonstration, so the PP population is approximated as safety-population completers (per SAP Section 3.3).
-Safety analyses use the safety population; disposition and demographic summaries use the randomised population.
+The two populations therefore contain the same subjects but do not group them identically: planned and actual treatment differ for the subjects noted in the study patients chapter, so the randomised and safety group sizes differ even though the total does not.
+The per-protocol (PP) population comprises safety-population subjects who completed the study without discontinuing early; the only protocol deviation information available for this demonstration is discontinuation for protocol violation, and those subjects are already excluded as non-completers, so the PP population is approximated as safety-population completers (per SAP Section 3.3).
+
+Population, disposition, baseline and efficacy outputs use the randomised population by planned treatment; safety outputs use the safety population by actual treatment.
 The primary endpoint is analysed on the ITT population, with a supportive analysis repeated on the PP population.
 
 ## Primary endpoint
 
 The primary endpoint is the time from first dose to the first dermatologic treatment-emergent adverse event, defined as an event with a system organ class of skin and subcutaneous tissue disorders that started on or after the first dose (per SAP Section 4.1).
+It is derived from adverse event data, so it is a safety endpoint analysed with efficacy methods; it is presented as the primary endpoint of this demonstration because the pilot data carry no efficacy measure.
 Subjects without such an event are censored at the last date known to be alive.
 
 Time to event is summarised by treatment group with Kaplan-Meier estimates of the cumulative incidence, medians and two-sided 95% confidence intervals [@kaplanmeier1958].
@@ -24,15 +27,24 @@ As a supportive analysis, the same Cox model is repeated on the per-protocol pop
 
 Change from baseline in systolic blood pressure at week 24 is analysed with an analysis of covariance model including treatment group as a factor and the baseline value as a covariate (per SAP Section 5.2).
 Least-squares means, their standard errors, and two-sided 95% confidence intervals are reported for each treatment group, together with the difference from placebo.
+The secondary endpoint is descriptive, so the two comparisons against placebo are not adjusted for multiplicity.
+Blood pressure is measured in three postures, each with its own baseline; the analysis uses the supine measurement, so each subject contributes one observation.
+
+## Safety analyses
+
+Adverse events are summarised by system organ class and preferred term, by maximum severity, by relationship to study drug, and separately for serious events (per SAP Section 6).
+Adverse event, concomitant medication and medical history tables report the terms reached by at least 5% of the subjects in any one treatment group; applying the threshold to the pooled population would hide a term concentrated in a single group.
+Laboratory, vital signs and electrocardiogram data are summarised as shifts from the baseline reference-range category to the worst post-baseline category, and laboratory data are additionally screened against the aminotransferase and bilirubin criteria for potential drug-induced liver injury.
 
 ## Handling of missing data
 
 No imputation is performed (per SAP Section 7).
-Analyses of continuous endpoints use the observed values at each visit, and time-to-event analyses use the censoring rule stated above.
+Analyses of continuous endpoints use the observed values at each visit, so the analysis of covariance at week 24 is restricted to the subjects with both a baseline and a week 24 value, and time-to-event analyses use the censoring rule stated above.
 
 ## Software
 
 All analyses were produced in R with the pharmaverse packages.
-Analysis data are the CDISC pilot ADaM datasets distributed in `pharmaverseadam`; the time-to-event dataset is derived with `admiral`.
+Analysis data are the CDISC pilot ADaM datasets distributed in `pharmaverseadam`, with the time-to-event dataset derived using `admiral` and the reason for discontinuation taken from the SDTM disposition domain in `pharmaversesdtm`.
 Summary tables are computed with `gtsummary`, which retains the underlying Analysis Results Datasets, and rendered with `gt`.
+Each table, listing and figure sits in a Quarto cross-reference div, so Quarto numbers it and resolves every reference to it; titles, populations and source notes come from a single index, `R/tlf-index.R`, which also maps each output to the ICH E3 output number and section it stands for.
 Package versions are listed in @sec-reproducibility.

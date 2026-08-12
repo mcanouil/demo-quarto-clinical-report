@@ -2,88 +2,129 @@
 
 # Safety evaluation
 
+Safety analyses count subjects under the treatment actually received, so the group sizes below differ from the randomised group sizes in the study patients chapter for the subjects whose actual treatment differed from their planned treatment.
+
 ## Extent of exposure
+
+::: {#tbl-exposure}
 
 ```{r}
 #| label: exposure
 
-tlf_exposure(adex) |>
-  tbl_nordvale(
-    title = "Table 14.3.1: Extent of exposure",
-    subtitle = "Safety population",
-    source_note = "Exposure is the total treatment duration in days, derived from the exposure analysis dataset."
-  )
+tlf_output(tlf_exposure(adex), "exposure")
 ```
 
+`{r} tlf_caption("exposure")`
+
+:::
+
+## Prior and concomitant medications
+
+::: {#tbl-conmeds}
+
+```{r}
+#| label: conmeds
+
+tlf_output(tlf_conmeds(adcm, adsl), "conmeds")
+```
+
+`{r} tlf_caption("conmeds")`
+
+:::
+
+Concomitant medication use was extensive and comparable across the treatment groups, as expected in an elderly population.
+
 ## Overview of adverse events
+
+::: {#tbl-ae-overview}
 
 ```{r}
 #| label: ae-overview
 
-tlf_ae_overview(adae, adsl) |>
-  tbl_nordvale(
-    title = "Table 14.3.2: Overview of treatment-emergent adverse events",
-    subtitle = "Safety population",
-    source_note = "Subjects are counted once in each row. A treatment-emergent adverse event started on or after the first dose of study drug."
-  )
+tlf_output(tlf_ae_overview(adae, adsl), "ae_overview")
 ```
 
+`{r} tlf_caption("ae_overview")`
+
+:::
+
 ## Adverse events by system organ class and preferred term
+
+::: {#tbl-ae-soc-pt}
 
 ```{r}
 #| label: ae-soc-pt
 
-tlf_ae_by_soc_pt(adae, adsl) |>
-  tbl_nordvale(
-    title = "Table 14.3.3: Treatment-emergent adverse events by system organ class and preferred term",
-    subtitle = "Events reported by at least 5% of subjects, safety population",
-    source_note = "Subjects reporting more than one event within a system organ class or preferred term are counted once."
-  )
+tlf_output(tlf_ae_by_soc_pt(adae, adsl), "ae_soc_pt")
 ```
 
+`{r} tlf_caption("ae_soc_pt")`
+
+:::
+
 Application-site and other dermatologic events dominated the adverse event profile in both xanomeline groups.
-The pattern is consistent with the transdermal delivery system and with the primary endpoint result in Table 14.2.1.
+The pattern is consistent with the transdermal delivery system and with the primary endpoint result in @tbl-tte.
 
 ## Adverse events by maximum severity
+
+::: {#tbl-ae-severity}
 
 ```{r}
 #| label: ae-severity
 
-tlf_ae_by_severity(adae, adsl) |>
-  tbl_nordvale(
-    title = "Table 14.3.4: Treatment-emergent adverse events by maximum severity",
-    subtitle = "Events reported by at least 5% of subjects, safety population",
-    source_note = "Subjects reporting more than one event within a preferred term are counted once, under the highest severity reported for that term."
-  )
+tlf_output(tlf_ae_by_severity(adae, adsl), "ae_severity")
 ```
 
+`{r} tlf_caption("ae_severity")`
+
+:::
+
 ## Adverse events by relationship to study drug
+
+::: {#tbl-ae-relationship}
 
 ```{r}
 #| label: ae-relationship
 
-tlf_ae_by_relationship(adae, adsl) |>
-  tbl_nordvale(
-    title = "Table 14.3.5: Treatment-emergent adverse events by relationship to study drug",
-    subtitle = "Events reported by at least 5% of subjects, safety population",
-    source_note = "Subjects reporting more than one event within a preferred term are counted once, as related if any event for that term was investigator-assessed as related."
-  )
+tlf_output(tlf_ae_by_relationship(adae, adsl), "ae_relationship")
 ```
 
+`{r} tlf_caption("ae_relationship")`
+
+:::
+
 ## Serious adverse events and deaths
+
+::: {#tbl-ae-serious}
 
 ```{r}
 #| label: ae-serious
 
-tlf_ae_serious(adae, adsl) |>
-  tbl_nordvale(
-    title = "Table 14.3.6: Serious treatment-emergent adverse events",
-    subtitle = "Safety population",
-    source_note = "Seriousness was assessed by the investigator according to the protocol definition."
-  )
+tlf_output(tlf_ae_serious(adae, adsl), "ae_serious")
 ```
 
-Subject-level detail for every serious event is listed in @sec-appendix-tlf.
+`{r} tlf_caption("ae_serious")`
+
+:::
+
+Subject-level detail for every serious event is listed in @lst-sae.
+
+### Narratives
+
+ICH E3 requires a narrative for every death, every other serious adverse event, and any other adverse event judged to be of special interest.
+Narratives are written from the source documents rather than from the analysis datasets, so they cannot be generated from the data in this demonstration.
+One narrative is reproduced below to show the structure; the remainder would follow the same shape, one per event.
+
+::: {.callout-note appearance="simple"}
+
+**Subject 01-701-XXXX, placebo, serious adverse event.**
+A subject in the placebo group experienced a serious adverse event during the treatment period.
+The event began on the study day recorded in @lst-sae, was assessed by the investigator as not related to study drug, and resolved.
+Study drug was not withdrawn and the subject continued in the study.
+
+The subject identifier and the clinical content of this narrative are placeholders and are not drawn from the source data.
+
+:::
 
 ## Laboratory evaluations
 
@@ -92,29 +133,74 @@ Subject-level detail for every serious event is listed in @sec-appendix-tlf.
 #| output: asis
 
 lab_shift_panel <- c(
-  "Alanine Aminotransferase (U/L)" = "Alanine aminotransferase",
-  "Aspartate Aminotransferase (U/L)" = "Aspartate aminotransferase",
-  "Bilirubin (umol/L)" = "Bilirubin",
-  "Creatinine (umol/L)" = "Creatinine"
+  "Alanine Aminotransferase (U/L)" = "lab_shift_alt",
+  "Aspartate Aminotransferase (U/L)" = "lab_shift_ast",
+  "Bilirubin (umol/L)" = "lab_shift_bili",
+  "Creatinine (umol/L)" = "lab_shift_creat"
 )
 
 tlf_shift_panel(adlb, lab_shift_panel)
 ```
 
 Shifts to a high category were infrequent for each analyte in this panel and distributed similarly across treatment groups.
-No subject met the biochemical criteria for a drug-induced liver injury.
+
+::: {#tbl-hys-law}
+
+```{r}
+#| label: hys-law
+
+tlf_output(tlf_hys_law(adlb, adsl), "hys_law")
+```
+
+`{r} tlf_caption("hys_law")`
+
+:::
+
+```{r}
+#| label: hys-law-numbers
+
+hys_flags <- hys_law_flags(adlb)
+hys_combined <- dplyr::filter(hys_flags, (alt_3x | ast_3x) & bili_2x)
+hys_groups <- sort(unique(as.character(hys_combined[["TRTA"]])))
+hys_any <- sum(hys_flags[["alt_3x"]] | hys_flags[["ast_3x"]] | hys_flags[["bili_2x"]])
+```
+
+Subjects meeting the combined aminotransferase and bilirubin criterion: `r nrow(hys_combined)`, in the following treatment groups: `r if (length(hys_groups) == 0L) "none" else paste(tolower(hys_groups), collapse = ", ")`.
+`r hys_any` subjects met at least one criterion in total, too few for the difference between treatment groups to be interpretable, so the laboratory data show no signal of xanomeline-related liver injury.
+Subject-level values for every subject meeting any criterion are listed in @lst-lab-abnormal.
 
 ## Vital signs
+
+::: {#tbl-vitals-shift}
 
 ```{r}
 #| label: vitals-shift
 
-tlf_shift(advs, "Systolic Blood Pressure (mmHg)") |>
-  tbl_nordvale(
-    title = "Table 14.3.8: Shift from baseline to worst post-baseline category",
-    subtitle = "Systolic blood pressure, safety population",
-    source_note = "Categories are relative to the reference range of the reporting site. The worst post-baseline category is high (hypertensive) if any post-baseline value was high, otherwise low (hypotensive) if any value was low."
-  )
+tlf_output(
+  tlf_shift(advs, "Systolic Blood Pressure (mmHg)", basetype = vitals_basetype),
+  "vitals_shift"
+)
 ```
 
+`{r} tlf_caption("vitals_shift")`
+
+:::
+
 Shifts to a high systolic blood pressure category occurred at a similar rate across treatment groups, with no excess of new hypotensive or hypertensive categories in either xanomeline group relative to placebo.
+
+## Electrocardiogram
+
+::: {#tbl-ecg-shift}
+
+```{r}
+#| label: ecg-shift
+
+tlf_output(tlf_ecg_shift(adeg), "ecg_shift")
+```
+
+`{r} tlf_caption("ecg_shift")`
+
+:::
+
+The QTcF interval is the only electrocardiogram parameter carrying reference-range indicators in these data.
+Shifts out of the normal range were infrequent and showed no dose-related pattern.

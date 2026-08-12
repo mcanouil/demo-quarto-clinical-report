@@ -14,7 +14,7 @@ Over 24 weeks of double-blind treatment in `r treated` subjects with mild to mod
 `r with_derm` subjects reported at least one dermatologic treatment-emergent adverse event, and the events began earlier in both xanomeline groups than in the placebo group.
 
 Serious treatment-emergent adverse events were reported for `r serious` subjects, without a pattern suggesting a treatment-related excess.
-Laboratory and vital sign findings did not identify a new safety concern, and systolic blood pressure was unchanged relative to placebo at week 24.
+Laboratory, vital sign and electrocardiogram findings did not identify a new safety concern, no subject in a xanomeline group met the combined biochemical criterion for potential drug-induced liver injury, and systolic blood pressure was unchanged relative to placebo at week 24.
 
 The results support the conclusion that dermatologic tolerability is the limiting factor for this formulation at the doses studied.
 Any further development of the transdermal route should address application-site tolerability, for example by modifying the adhesive system or the rotation schedule of application sites.

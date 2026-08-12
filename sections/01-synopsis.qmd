@@ -18,7 +18,7 @@ synopsis <- tibble::tribble(
   "Planned duration of treatment", "24 weeks",
   "Primary endpoint", "Time to first dermatologic treatment-emergent adverse event",
   "Secondary endpoint", "Change from baseline in systolic blood pressure at week 24",
-  "Analysis populations", "Randomised population and safety population",
+  "Analysis populations", "Randomised (intention-to-treat), safety and per-protocol populations",
   "Statistical methods", "Kaplan-Meier estimation and Cox proportional hazards for the primary endpoint; analysis of covariance for the secondary endpoint"
 )
 

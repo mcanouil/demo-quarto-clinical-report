@@ -2,30 +2,51 @@
 
 # Study patients
 
+## Analysis populations
+
+::: {#tbl-populations}
+
+```{r}
+#| label: populations
+
+tlf_output(tlf_populations(adsl), "populations")
+```
+
+`{r} tlf_caption("populations")`
+
+:::
+
+Every randomised subject received at least one dose of study drug, so the randomised, intention-to-treat and safety populations contain the same subjects.
+They are not interchangeable in the tables that follow: population tables and efficacy analyses count subjects under the treatment to which they were randomised, whereas safety analyses count them under the treatment actually received, and `r sum(as.character(adsl[["TRT01P"]]) != as.character(adsl[["TRT01A"]]))` subjects randomised to the high dose received the low dose instead.
+
 ## Disposition of subjects
+
+::: {#tbl-disposition}
 
 ```{r}
 #| label: disposition
 
-tlf_disposition(adsl) |>
-  tbl_nordvale(
-    title = "Table 14.1.1: Subject disposition",
-    subtitle = "Randomised population",
-    source_note = "Percentages use the number of randomised subjects in each treatment group as denominator."
-  )
+tlf_output(tlf_disposition(adsl), "disposition")
 ```
+
+`{r} tlf_caption("disposition")`
+
+:::
 
 ```{r}
 #| label: disposition-numbers
 
 discontinued <- sum(adsl[["COMPFL"]] == "N")
 deaths <- sum(!is.na(adsl[["DTHFL"]]) & adsl[["DTHFL"]] == "Y")
+reasons <- sort(table(adsl[["DCSREAS"]]), decreasing = TRUE)
+leading_reason <- tolower(names(reasons)[[1L]])
 ```
 
 `r discontinued` subjects discontinued the study before the end of the treatment period, and `r deaths` deaths were reported.
-Discontinuation was more frequent in the xanomeline groups than in the placebo group, driven mainly by adverse events at the application site.
+The most frequent reason for discontinuation was `r leading_reason`, recorded for `r reasons[[1L]]` of the `r discontinued` subjects who discontinued, and discontinuation was more frequent in the xanomeline groups than in the placebo group.
 
 ## Protocol deviations
 
-Protocol deviations were reviewed before database lock and classified as important or not important.
-No deviation was considered to affect the interpretation of the primary endpoint.
+The pilot study underlying this demonstration ships no protocol deviation dataset, so deviations can be reported only where they ended a subject's participation.
+`r sum(!is.na(adsl[["DCSREAS"]]) & adsl[["DCSREAS"]] == "Protocol violation")` subjects discontinued for a protocol violation; they are listed in @lst-deviation.
+Deviations that did not lead to discontinuation cannot be counted here, so no statement is made about their number or their effect on the primary endpoint.

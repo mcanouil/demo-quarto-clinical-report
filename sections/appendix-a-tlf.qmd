@@ -2,46 +2,80 @@
 
 # Listings {#sec-appendix-tlf}
 
+## Individual subject data listings
+
 ::: {.landscape}
 
-```{r}
-#| label: listing-sae
-
-listing_serious_ae(adae) |>
-  gt_nordvale() |>
-  gt::tab_header(
-    title = gt::md("Listing 16.2.7.1: Serious treatment-emergent adverse events"),
-    subtitle = gt::md("Safety population")
-  ) |>
-  gt::tab_source_note(
-    gt::md("Onset day is relative to the first dose of study drug. One row per event.")
-  )
-```
+::: {#lst-discontinuation}
 
 ```{r}
 #| label: listing-discontinuation
 
-adsl |>
-  dplyr::filter(COMPFL == "N") |>
-  dplyr::arrange(TRT01P, USUBJID) |>
-  dplyr::transmute(
-    Subject = USUBJID,
-    Treatment = as.character(TRT01P),
-    `Age (years)` = AGE,
-    Sex = as.character(SEX),
-    `Treatment duration (days)` = TRTDURD,
-    `End of study status` = stringr::str_to_sentence(EOSSTT)
-  ) |>
-  head(40) |>
-  drop_labels() |>
-  gt_nordvale() |>
-  gt::tab_header(
-    title = gt::md("Listing 16.2.1.1: Subjects who discontinued the study"),
-    subtitle = gt::md("Randomised population, first 40 subjects")
-  ) |>
-  gt::tab_source_note(
-    gt::md("Listing truncated for the purposes of this demonstration.")
-  )
+tlf_output(listing_discontinuation(adsl), "listing_discontinuation")
 ```
 
+`{r} tlf_caption("listing_discontinuation")`
+
 :::
+
+::: {#lst-deviation}
+
+```{r}
+#| label: listing-deviation
+
+tlf_output(listing_deviation(adsl), "listing_deviation")
+```
+
+`{r} tlf_caption("listing_deviation")`
+
+:::
+
+::: {#lst-demographics}
+
+```{r}
+#| label: listing-demographics
+
+tlf_output(listing_demographics(adsl), "listing_demographics")
+```
+
+`{r} tlf_caption("listing_demographics")`
+
+:::
+
+::: {#lst-sae}
+
+```{r}
+#| label: listing-sae
+
+tlf_output(listing_serious_ae(adae), "listing_sae")
+```
+
+`{r} tlf_caption("listing_sae")`
+
+:::
+
+::: {#lst-lab-abnormal}
+
+```{r}
+#| label: listing-lab-abnormal
+
+tlf_output(listing_lab_abnormal(adlb), "listing_lab_abnormal")
+```
+
+`{r} tlf_caption("listing_lab_abnormal")`
+
+:::
+
+:::
+
+## Index of outputs
+
+Quarto numbers the tables, figures and listings of this report in the order they appear.
+The index below maps each of those numbers to the ICH E3 output number it stands for, and to the ICH E3 section that number belongs to.
+
+```{r}
+#| label: tlf-catalogue
+#| output: asis
+
+tlf_catalogue()
+```
