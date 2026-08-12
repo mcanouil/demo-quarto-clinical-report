@@ -43,6 +43,12 @@ jobs:
       - name: Restore R packages
         uses: r-lib/actions/setup-renv@v2
 
+      - name: Build the analysis datasets
+        run: Rscript R/00-adam.R
+
+      - name: Check the analysis results
+        run: Rscript -e 'testthat::test_dir("tests/testthat")'
+
       - name: Render book
         run: quarto render --profile book
 
