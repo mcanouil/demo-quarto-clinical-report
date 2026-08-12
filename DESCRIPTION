@@ -18,6 +18,8 @@ Encoding: UTF-8
 Imports:
     admiral,
     broom,
+    cards,
+    cardx,
     dplyr,
     emmeans,
     ggplot2,
@@ -27,6 +29,7 @@ Imports:
     jsonlite,
     knitr,
     pharmaverseadam,
+    pharmaversesdtm,
     rmarkdown,
     scales,
     sessioninfo,
@@ -34,5 +37,6 @@ Imports:
     survival,
     svglite,
     systemfonts,
+    testthat,
     tibble,
     yaml
