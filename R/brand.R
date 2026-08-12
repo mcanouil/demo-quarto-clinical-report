@@ -84,7 +84,9 @@ brand <- function() {
     "warning",
     "danger"
   )
-  colours <- lapply(named, function(name) resolve_colour(colour[[name]], palette))
+  colours <- lapply(named, function(name) {
+    resolve_colour(colour[[name]], palette)
+  })
   names(colours) <- named
 
   list(
@@ -132,7 +134,11 @@ brand_font_files <- function() {
         path <- file.path(root, path)
       }
       if (!file.exists(path)) {
-        warning("Font file declared in the brand not found: ", path, call. = FALSE)
+        warning(
+          "Font file declared in the brand not found: ",
+          path,
+          call. = FALSE
+        )
         next
       }
       paths <- c(paths, normalizePath(path))
@@ -159,12 +165,20 @@ configure_brand_fonts <- function() {
     return(invisible(NULL))
   }
 
-  families <- unique(c(brand()[["base_family"]], brand()[["heading_family"]], brand()[["mono_family"]]))
+  families <- unique(c(
+    brand()[["base_family"]],
+    brand()[["heading_family"]],
+    brand()[["mono_family"]]
+  ))
   families <- families[nzchar(families)]
   imports <- vapply(
     families,
     function(family) {
-      systemfonts::fonts_as_import(family = family, type = "import", may_embed = TRUE)
+      systemfonts::fonts_as_import(
+        family = family,
+        type = "import",
+        may_embed = TRUE
+      )
     },
     character(1L)
   )
@@ -178,7 +192,11 @@ configure_brand_fonts <- function() {
 #' Sponsor ggplot2 theme.
 theme_nordvale <- function(base_size = 9) {
   brand <- brand()
-  accent <- scales::col_mix(a = brand[["ink"]], b = brand[["paper"]], amount = 0.25)
+  accent <- scales::col_mix(
+    a = brand[["ink"]],
+    b = brand[["paper"]],
+    amount = 0.25
+  )
 
   ggplot2::theme_minimal(
     base_size = base_size,
@@ -196,7 +214,10 @@ theme_nordvale <- function(base_size = 9) {
       panel.grid.minor = ggplot2::element_blank(),
       legend.position = "top",
       legend.title = ggplot2::element_text(colour = accent),
-      plot.title = ggplot2::element_text(colour = accent, size = ggplot2::rel(1.4)),
+      plot.title = ggplot2::element_text(
+        colour = accent,
+        size = ggplot2::rel(1.4)
+      ),
       plot.title.position = "plot",
       plot.subtitle = ggplot2::element_text(colour = brand[["ink"]]),
       plot.caption = ggplot2::element_text(colour = accent, hjust = 0)
@@ -219,7 +240,11 @@ treatment_colours <- function() {
 #' colours, borders and alignment.
 gt_style_nordvale <- function(gt_tbl) {
   brand <- brand()
-  accent <- scales::col_mix(a = brand[["ink"]], b = brand[["paper"]], amount = 0.25)
+  accent <- scales::col_mix(
+    a = brand[["ink"]],
+    b = brand[["paper"]],
+    amount = 0.25
+  )
 
   gt_tbl |>
     gt::tab_options(
@@ -262,17 +287,18 @@ gt_nordvale <- function(data, ...) {
   gt_style_nordvale(gt::gt(data, ...))
 }
 
-#' Render a gtsummary table as a sponsor-styled gt table.
+#' Render a table as a sponsor-styled gt table.
 #'
-#' `title` and `subtitle` carry the ICH E3 output number and population.
-tbl_nordvale <- function(tbl, title = NULL, subtitle = NULL, source_note = NULL) {
-  gt_tbl <- gtsummary::as_gt(tbl)
-  if (!is.null(title)) {
-    gt_tbl <- gt::tab_header(
-      gt_tbl,
-      title = gt::md(title),
-      subtitle = if (is.null(subtitle)) NULL else gt::md(subtitle)
-    )
+#' Takes a `gtsummary` table, a `gt` table or a data frame, so summary tables
+#' and listings share one path. The table carries no title: the cross-reference
+#' div that wraps it supplies the caption, and Quarto supplies the number.
+tbl_nordvale <- function(tbl, source_note = NULL) {
+  gt_tbl <- if (inherits(tbl, "gt_tbl")) {
+    tbl
+  } else if (is.data.frame(tbl)) {
+    gt::gt(tbl)
+  } else {
+    gtsummary::as_gt(tbl)
   }
   if (!is.null(source_note)) {
     gt_tbl <- gt::tab_source_note(gt_tbl, gt::md(source_note))
@@ -282,7 +308,9 @@ tbl_nordvale <- function(tbl, title = NULL, subtitle = NULL, source_note = NULL)
 
 #' Compact gtsummary defaults shared by every table in the report.
 configure_gtsummary <- function() {
-  gtsummary::set_gtsummary_theme(gtsummary::theme_gtsummary_compact(set_theme = FALSE))
+  gtsummary::set_gtsummary_theme(gtsummary::theme_gtsummary_compact(
+    set_theme = FALSE
+  ))
   gtsummary::theme_gtsummary_language("en", big.mark = ",", decimal.mark = ".")
   invisible(NULL)
 }

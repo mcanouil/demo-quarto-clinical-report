@@ -2,6 +2,7 @@
 #| include: false
 
 source("R/brand.R")
+source("R/tlf-index.R")
 source("R/tlf.R")
 
 configure_brand_fonts()
@@ -13,6 +14,9 @@ adtte <- adam("adtte")
 adex <- adam("adex")
 advs <- adam("advs")
 adlb <- adam("adlb")
+adeg <- adam("adeg")
+adcm <- adam("adcm")
+admh <- adam("admh")
 
-population <- population_counts(adsl)
+counts <- adam_counts()
 ```
