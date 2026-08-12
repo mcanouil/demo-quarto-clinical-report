@@ -9,7 +9,9 @@
 # @author Mickaël Canouil
 
 # Source data are the CDISC pilot study (CDISCPILOT01) ADaM datasets shipped by
-# pharmaverseadam. ADTTE is not shipped, so it is derived here with admiral.
+# pharmaverseadam. ADTTE is not shipped, so it is derived here with admiral, and
+# the reason for discontinuation comes from the SDTM disposition domain shipped
+# by pharmaversesdtm, since the pilot ADSL carries no such variable.
 #
 # Run with: Rscript R/00-adam.R
 
@@ -24,10 +26,34 @@ treatment_levels <- c("Placebo", "Xanomeline Low Dose", "Xanomeline High Dose")
 output_dir <- "data"
 dir.create(output_dir, showWarnings = FALSE)
 
+# Disposition -------------------------------------------------------------
+
+# One record per screened subject. The pilot ADSL reports whether a subject
+# completed or discontinued (EOSSTT) but not why, so the reason is taken here
+# from the SDTM disposition domain and carried onto ADSL as DCSREAS.
+disposition <- pharmaversesdtm::ds |>
+  filter(DSCAT == "DISPOSITION EVENT") |>
+  transmute(USUBJID, DCSREAS = stringr::str_to_sentence(DSDECOD))
+
+screened <- n_distinct(disposition[["USUBJID"]])
+
+# Reasons are listed from the most to the least frequent, which is how the
+# disposition table reads them; screen failures are not randomised, so they
+# never reach ADSL and are excluded from the level set.
+discontinuation_reasons <- disposition |>
+  filter(!DCSREAS %in% c("Completed", "Screen failure")) |>
+  count(DCSREAS, sort = TRUE) |>
+  pull(DCSREAS)
+
 # Subject level -----------------------------------------------------------
 
 adsl <- pharmaverseadam::adsl |>
   filter(ARM %in% treatment_levels) |>
+  derive_vars_merged(
+    dataset_add = disposition,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(DCSREAS)
+  ) |>
   mutate(
     ITTFL = "Y",
     TRT01P = factor(TRT01P, levels = treatment_levels),
@@ -36,11 +62,20 @@ adsl <- pharmaverseadam::adsl |>
     SEX = factor(SEX, levels = c("F", "M"), labels = c("Female", "Male")),
     RACE = factor(RACE),
     COMPFL = if_else(EOSSTT == "COMPLETED", "Y", "N", missing = "N"),
-    DCSREAS = if_else(EOSSTT == "DISCONTINUED", "Discontinued", "Completed"),
-    # No protocol deviation data is shipped with the CDISC pilot study, so the
-    # per-protocol population is approximated as safety-population completers.
+    # A reason is reported only for subjects who discontinued; the disposition
+    # table indents these rows under the discontinuation count.
+    DCSREAS = factor(
+      if_else(COMPFL == "N", DCSREAS, NA_character_),
+      levels = discontinuation_reasons
+    ),
+    # The pilot ships no protocol deviation dataset. The only deviation signal
+    # available is discontinuation for protocol violation, and those subjects
+    # are already excluded below as non-completers, so the per-protocol
+    # population remains an approximation: safety-population completers.
     PPROTFL = if_else(SAFFL == "Y" & COMPFL == "Y", "Y", "N")
   )
+
+stopifnot(!anyNA(adsl[["DCSREAS"]][adsl[["COMPFL"]] == "N"]))
 
 # Adverse events ----------------------------------------------------------
 
@@ -88,7 +123,7 @@ censor_at_last_contact <- censor_source(
   )
 )
 
-adtte <- derive_param_tte(
+adtte_all <- derive_param_tte(
   dataset_adsl = adsl_tte,
   start_date = TRTSDT,
   event_conditions = list(first_derm_event),
@@ -110,8 +145,28 @@ adtte <- derive_param_tte(
     dataset_add = adsl_tte,
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(TRT01P, TRT01A, SAFFL, PPROTFL, AGE, AGEGR1, SEX)
+  )
+
+adtte <- filter(adtte_all, !is.na(AVAL), AVAL > 0)
+adtte_excluded <- n_distinct(adtte_all[["USUBJID"]]) -
+  n_distinct(adtte[["USUBJID"]])
+
+# A few subjects in the pilot data have a last date known alive that precedes
+# their first dose. derive_param_tte() censors them at the start date rather than
+# dropping them, giving a one-day time on study. The count is carried forward so
+# that the time-to-event table can footnote it instead of hiding it.
+#
+# Counted from the unfiltered derivation, not from `adtte`: were those records
+# ever to fall to a non-positive AVAL, the filter above would remove them and
+# this count would silently report zero, turning the disclosure in the report
+# into a false statement.
+censored_before_first_dose <- adtte_all |>
+  filter(CNSR == 1L) |>
+  semi_join(
+    filter(adsl_tte, !is.na(LSTALVDT), LSTALVDT < TRTSDT),
+    by = "USUBJID"
   ) |>
-  filter(!is.na(AVAL), AVAL > 0)
+  nrow()
 
 # Exposure ----------------------------------------------------------------
 
@@ -134,7 +189,65 @@ adlb <- pharmaverseadam::adlb |>
   filter(SAFFL == "Y", !is.na(AVAL)) |>
   mutate(TRTA = factor(TRTA, levels = treatment_levels))
 
+# Electrocardiogram -------------------------------------------------------
+
+# The analysis records are the average of the replicate readings at each visit,
+# so DTYPE is "AVERAGE" rather than missing as it is in ADVS.
+adeg <- pharmaverseadam::adeg |>
+  semi_join(adsl, by = "USUBJID") |>
+  filter(SAFFL == "Y", ANL01FL == "Y") |>
+  mutate(TRTA = factor(TRTA, levels = treatment_levels))
+
+# Concomitant medications -------------------------------------------------
+
+adcm <- pharmaverseadam::adcm |>
+  semi_join(adsl, by = "USUBJID") |>
+  filter(SAFFL == "Y") |>
+  mutate(
+    TRTA = factor(TRTA, levels = treatment_levels),
+    CMCLAS = stringr::str_to_sentence(CMCLAS),
+    CMDECOD = stringr::str_to_sentence(CMDECOD)
+  )
+
+# Medical history ---------------------------------------------------------
+
+# The primary diagnosis is recorded once per subject with no coded body system;
+# it is the indication, not a medical history finding, so it is excluded.
+# Medical history is a baseline characteristic, so it is summarised on the
+# randomised population by planned treatment.
+admh <- pharmaverseadam::admh |>
+  semi_join(adsl, by = "USUBJID") |>
+  filter(!is.na(MHBODSYS)) |>
+  mutate(
+    TRT01P = factor(TRT01P, levels = treatment_levels),
+    MHBODSYS = stringr::str_to_sentence(MHBODSYS),
+    MHDECOD = stringr::str_to_sentence(MHDECOD)
+  )
+
 # Write -------------------------------------------------------------------
+
+# Counts no analysis dataset can carry, because they describe subjects the
+# analysis datasets exclude. Written alongside the datasets so the subject flow
+# figure and the table footnotes read the same frozen snapshot as every other
+# number in the report, rather than reaching back into the source packages.
+counts <- list(
+  screened = screened,
+  randomised = nrow(adsl),
+  treated = sum(adsl[["SAFFL"]] == "Y"),
+  completed = sum(adsl[["COMPFL"]] == "Y"),
+  adtte_excluded = adtte_excluded,
+  censored_before_first_dose = censored_before_first_dose
+)
+
+saveRDS(counts, file.path(output_dir, "counts.rds"))
+message(
+  sprintf(
+    "COUNTS: %d screened, %d randomised, %d excluded from ADTTE",
+    counts[["screened"]],
+    counts[["randomised"]],
+    counts[["adtte_excluded"]]
+  )
+)
 
 datasets <- list(
   adsl = adsl,
@@ -142,7 +255,10 @@ datasets <- list(
   adtte = adtte,
   adex = adex,
   advs = advs,
-  adlb = adlb
+  adlb = adlb,
+  adeg = adeg,
+  adcm = adcm,
+  admh = admh
 )
 
 for (name in names(datasets)) {
