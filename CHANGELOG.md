@@ -11,6 +11,19 @@ All notable changes to this project will be documented in this file.
 - feat: analysis layer built on `pharmaverseadam`, including a time-to-event dataset derived with `admiral` and tables built with `gtsummary`.
 - feat: book and single-document profiles rendering the same section files.
 - feat: Typst table of contents heading taken from the localised `quarto.language.toc-title-document` string, so it follows the document `lang`.
-- ci: render workflow publishing the book to GitHub Pages and attaching the PDF.
+- feat: every table, listing and figure wrapped in a Quarto cross-reference div, so Quarto numbers each output and every reference to it resolves.
+- feat: `R/tlf-index.R` holding the caption, population and source note of every output, together with the ICH E3 output number and section it stands for, and an index of outputs generated from it that maps each Quarto number to its ICH E3 number.
+- feat: analysis population table, reasons for discontinuation from the SDTM disposition domain, medical history, prior and concomitant medications, a potential drug-induced liver injury screen, an electrocardiogram shift table, and listings for protocol violations, demographic data and abnormal laboratory values.
+- feat: adverse event narrative structure under serious adverse events, with one worked placeholder.
+- fix: vital signs analyses fix the supine baseline, so a subject no longer enters the shift table and the analysis of covariance once per posture.
+- fix: the analysis of covariance reports unadjusted confidence intervals, matching what the statistical methods chapter and the SAP describe, instead of the Dunnett-adjusted intervals `emmeans` applies by default to `trt.vs.ctrl`.
+- fix: adverse event, concomitant medication and medical history tables apply their incidence threshold within each treatment group instead of the pooled population.
+- fix: the overall row of a threshold table counts every subject with a qualifying record rather than only those whose term cleared the threshold, so the adverse event tables no longer disagree with the overview table in the same chapter; classes left with no reported term are dropped instead of standing empty.
+- fix: `parameter_records()` refuses a dataset with no `BASETYPE` and records with a missing one, rather than failing obscurely or dropping them silently.
+- fix: the exposure categories include a category for subjects with no exposure, which were previously dropped as missing.
+- fix: the subject flow figure reads the frozen counts written alongside the analysis datasets instead of the source package.
+- fix: prose, table subtitles and the reviewer's guide agree on which population and which treatment variable each output uses; planned and actual treatment differ for 12 subjects in these data.
+- test: `testthat` suite covering dataset invariants, independent recomputation of the reported counts, and double programming of the Cox and analysis of covariance results.
+- ci: render workflow publishing the book to GitHub Pages and attaching the PDF, and running the analysis checks before rendering.
 - build: `DESCRIPTION` declaring the R dependencies, with `renv` configured for explicit snapshots.
 - chore: licence, copyright and author headers on every source file, and a copy of the licence inside the extension.

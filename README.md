@@ -14,6 +14,7 @@ A complete Quarto project that turns pharmaverse ADaM data into a branded, spons
 - Fonts bundled in the extension, so the output is reproducible on any machine.
 - The same section files rendered either as a Quarto book or as a single long document, selected with a Quarto profile.
 - An analysis layer built on the pharmaverse: `pharmaverseadam` data, one `admiral` derivation, `gtsummary` tables that retain their Analysis Results Datasets, and `ggplot2` figures.
+- Cross-reference divs around every table, listing and figure, with captions computed in R from a single index that also maps each output to its ICH E3 number.
 
 ## Structure
 
@@ -24,7 +25,9 @@ A complete Quarto project that turns pharmaverse ADaM data into a branded, spons
 | `DESCRIPTION`                    | Declares the R dependencies; `renv` snapshots in explicit mode from this file. |
 | `R/00-adam.R`                    | Builds the analysis datasets, including the ADTTE derived with `admiral`.      |
 | `R/brand.R`                      | Reads the brand and applies it to `ggplot2`, `gt` and `gtsummary`.             |
+| `R/tlf-index.R`                  | The caption, source note and ICH E3 number of every output, in one place.      |
 | `R/tlf.R`                        | One function per table, listing or figure.                                     |
+| `tests/testthat/`                | Invariants, independent recomputation and double programming of the results.   |
 | `sections/`                      | The ICH E3 sections, used by both profiles.                                    |
 | `csr.qmd`                        | Single-document assembly of `sections/`.                                       |
 | `sap.qmd`                        | Companion Statistical Analysis Plan, rendered independently of the CSR.        |
@@ -74,7 +77,7 @@ Rscript R/00-adam.R
 
 ## Switching from draft to final
 
-`status` controls the draft watermark and the draft notice on the cover: `_quarto-book.yml` for the book, `csr.qmd` for the single document.
+`status` controls the draft watermark and the draft notice on the cover, and is set in `_metadata-csr.yml`, which both the book profile and `csr.qmd` load.
 Set it to `final` and re-render to remove both.
 The companion SAP (`sap.qmd`) sets its own `status` separately, since it is a different document with its own document-control history.
 
