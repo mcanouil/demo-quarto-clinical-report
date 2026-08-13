@@ -2,6 +2,14 @@
 
 # Listings {#sec-appendix-tlf}
 
+<!-- Quarto left-aligns listing floats for code listings and injects that show
+rule before the body, so it beats anything the format template sets. These
+listings are tabular subject data, so they follow the tables and stay centred. -->
+
+```{=typst}
+#show figure.where(kind: "quarto-float-lst"): set align(center)
+```
+
 ## Individual subject data listings
 
 ::: {.landscape}
