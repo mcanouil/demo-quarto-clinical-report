@@ -12,8 +12,6 @@ listings are tabular subject data, so they follow the tables and stay centred. -
 
 ## Individual subject data listings
 
-::: {.landscape}
-
 ::: {#lst-discontinuation}
 
 ```{r}
@@ -49,6 +47,8 @@ tlf_output(listing_demographics(adsl), "listing_demographics")
 `{r} tlf_caption("listing_demographics")`
 
 :::
+
+::: {.landscape}
 
 ::: {#lst-sae}
 
