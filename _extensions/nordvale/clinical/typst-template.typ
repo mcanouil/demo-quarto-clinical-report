@@ -100,7 +100,7 @@
   set par(justify: true, leading: linestretch * 0.62em)
 
   set heading(numbering: sectionnumbering)
-  show heading: it => block(above: 1.4em, below: 0.8em)[
+  show heading: it => block(above: 1.4em, below: 0.8em, sticky: true)[
     #set text(
       font: if heading-family == none { font } else { heading-family },
       weight: heading-weight,
@@ -111,7 +111,7 @@
   ]
   show heading.where(level: 1): it => {
     pagebreak(weak: true)
-    block(above: 0em, below: 0.9em)[
+    block(above: 0em, below: 0.9em, sticky: true)[
       #set text(
         font: if heading-family == none { font } else { heading-family },
         weight: heading-weight,
@@ -129,6 +129,15 @@
   // the explicit per-column `align:` tuple gt emits still wins.
   set table(inset: 5pt, stroke: none, align: left)
   show table: it => align(center, it)
+
+  // Quarto wraps every cross-referenced float in a `figure`, whose block is not
+  // breakable, so a table taller than the space left overflows the page instead
+  // of continuing on the next one. Typst repeats the `table.header` rows Pandoc
+  // emits once the block is allowed to break. Plots stay unbreakable so an
+  // image never parts from its caption.
+  show figure.where(kind: "quarto-float-tbl"): set block(breakable: true)
+  show figure.where(kind: "quarto-float-lst"): set block(breakable: true)
+
   show figure.caption: set text(size: 0.9em, fill: muted)
   show link: set text(fill: primary)
 
