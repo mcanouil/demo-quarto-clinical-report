@@ -210,3 +210,22 @@ test_that("every indexed output is wrapped in a cross-reference div", {
 
   expect_equal(missing_div, character(0))
 })
+
+test_that("each output number sits under the ICH E3 section it records", {
+  expect_true(all(
+    startsWith(tlf_index[["number"]], tlf_index[["section"]])
+  ))
+})
+
+test_that("the numbers written for the filter match the index", {
+  path <- tempfile(fileext = ".json")
+  on.exit(unlink(path), add = TRUE)
+
+  tlf_write_numbers(path)
+  written <- jsonlite::read_json(path, simplifyVector = TRUE)
+
+  expect_equal(
+    written[tlf_index[["ref"]]],
+    stats::setNames(tlf_index[["number"]], tlf_index[["ref"]])
+  )
+})
