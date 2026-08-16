@@ -78,8 +78,8 @@ tlf_output(listing_lab_abnormal(adlb), "listing_lab_abnormal")
 
 ## Index of outputs
 
-Quarto numbers the tables, figures and listings of this report in the order they appear.
-The index below maps each of those numbers to the ICH E3 output number it stands for, and to the ICH E3 section that number belongs to.
+Every table, figure and listing of this report carries the ICH E3 output number that `R/tlf-index.R` holds for it.
+The index below lists them all, with the ICH E3 section each number belongs to and the population the output was computed on.
 
 ```{r}
 #| label: tlf-catalogue

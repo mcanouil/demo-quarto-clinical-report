@@ -20,6 +20,8 @@ contributes:
       filters:
         - path: appendices.lua
           at: post-quarto
+        - path: tlf-numbers.lua
+          at: post-quarto
       citeproc: true
       papersize: a4
       margin:
@@ -48,3 +50,5 @@ contributes:
       fig-height: 4.5
       filters:
         - inline-svglite.lua
+        - path: tlf-numbers.lua
+          at: post-quarto

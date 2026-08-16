@@ -1,5 +1,7 @@
 project:
-  pre-render: R/00-adam.R
+  pre-render:
+    - R/00-adam.R
+    - R/01-tlf-numbers.R
   execute-dir: project
 
 profile:
