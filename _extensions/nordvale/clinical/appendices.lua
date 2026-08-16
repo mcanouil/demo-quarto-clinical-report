@@ -60,8 +60,10 @@ local float_counter_reset = [[
 -- ============================================================================
 
 --- Whether this render is a book, learnt from the file metadata of a heading.
---- Only a book carries `bookItemType`, and a Typst book is always rendered as a
---- single file, which is the case Quarto resets the float counters for.
+--- Quarto keeps its own `single-file-book` parameter out of reach of extension
+--- filters, so the flag stands in for it. Only a book carries `bookItemType`,
+--- and a Typst book is always rendered as a single file, which is the case
+--- Quarto resets the float counters for.
 local is_book = false
 
 -- ============================================================================
@@ -117,7 +119,7 @@ end
 -- ============================================================================
 
 -- The file metadata markers are raw blocks in the same document, so they have
--- to be parsed during this filter's own traversal for bookItemType to be set.
+-- to be parsed during this filter's own traversal for `bookItemType` to be set.
 -- `Pandoc` runs after the headings, which is where the book is recognised.
 return quarto.utils.combineFilters({
   quarto.utils.file_metadata_filter(),

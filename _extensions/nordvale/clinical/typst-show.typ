@@ -67,11 +67,11 @@ $endif$
       image(entry.path, height: 16mm, alt: entry.at("alt", default: none))
     }
   },
-  primary: brand-color.at("primary", default: rgb("#0E5C63")),
-  secondary: brand-color.at("secondary", default: rgb("#3E5060")),
-  tertiary: brand-color.at("tertiary", default: rgb("#E7EDEE")),
-  ink: brand-color.at("foreground", default: rgb("#16202A")),
-  paper: brand-color.at("background", default: rgb("#FDFDFC")),
+  primary: brand-color.at("primary", default: nordvale-primary),
+  secondary: brand-color.at("secondary", default: nordvale-secondary),
+  tertiary: brand-color.at("tertiary", default: nordvale-tertiary),
+  ink: brand-color.at("foreground", default: nordvale-ink),
+  paper: brand-color.at("background", default: nordvale-paper),
 $if(lang)$
   lang: "$lang$",
 $endif$

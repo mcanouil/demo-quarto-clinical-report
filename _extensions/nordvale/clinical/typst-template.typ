@@ -9,6 +9,15 @@
 // Brand colours and logos are injected by Quarto as `brand-color` and
 // `brand-logo-images`; the show partial reads them and passes them in here.
 
+// Fallback palette, used when the document carries no brand of its own. The
+// show partial reads these too, so the values live in one place.
+#let nordvale-primary = rgb("#0E5C63")
+#let nordvale-secondary = rgb("#3E5060")
+#let nordvale-tertiary = rgb("#E7EDEE")
+#let nordvale-ink = rgb("#16202A")
+#let nordvale-paper = rgb("#FDFDFC")
+#let nordvale-accent = rgb("#C8862B")
+
 #let field-label(body, color: black) = text(
   size: 8pt,
   weight: "semibold",
@@ -28,7 +37,7 @@
   )
 }
 
-#let signature-block(name, role, ink: black, rule: gray) = block(
+#let signature-block(name, role, rule: gray) = block(
   width: 100%,
   inset: (top: 10pt, bottom: 6pt),
 )[
@@ -61,12 +70,11 @@
   approvals: (),
   revisions: (),
   logo: none,
-  logo-height: 16mm,
-  primary: rgb("#0E5C63"),
-  secondary: rgb("#3E5060"),
-  tertiary: rgb("#E7EDEE"),
-  ink: rgb("#16202A"),
-  paper: rgb("#FDFDFC"),
+  primary: nordvale-primary,
+  secondary: nordvale-secondary,
+  tertiary: nordvale-tertiary,
+  ink: nordvale-ink,
+  paper: nordvale-paper,
   lang: "en",
   region: "GB",
   font: none,
@@ -85,6 +93,7 @@
   doc,
 ) = {
   let heading-fill = if heading-color == none { primary } else { heading-color }
+  let heading-font = if heading-family == none { font } else { heading-family }
   let doc-type = if document-type == none { title } else { document-type }
   let is-draft = lower(status) == "draft"
   let muted = secondary
@@ -102,7 +111,7 @@
   set heading(numbering: sectionnumbering)
   show heading: it => block(above: 1.4em, below: 0.8em, sticky: true)[
     #set text(
-      font: if heading-family == none { font } else { heading-family },
+      font: heading-font,
       weight: heading-weight,
       fill: heading-fill,
     )
@@ -113,7 +122,7 @@
     pagebreak(weak: true)
     block(above: 0em, below: 0.9em, sticky: true)[
       #set text(
-        font: if heading-family == none { font } else { heading-family },
+        font: heading-font,
         weight: heading-weight,
         fill: heading-fill,
         size: 1.5em,
@@ -151,7 +160,7 @@
   )[
     #block(width: 100%, height: 42mm, fill: primary, inset: (x: 20mm, y: 14mm))[
       #if logo != none {
-        block(height: logo-height)[#logo]
+        logo
       } else {
         text(fill: paper, size: 20pt, weight: "semibold")[#sponsor]
       }
@@ -159,9 +168,9 @@
     #block(inset: (x: 20mm, top: 18mm, bottom: 0mm), width: 100%)[
       #field-label([Protocol #protocol], color: muted)
       #v(6pt)
-      #text(size: 24pt, weight: "semibold", fill: primary, font: heading-family)[#doc-type]
+      #text(size: 24pt, weight: "semibold", fill: primary, font: heading-font)[#doc-type]
       #v(10pt)
-      #line(length: 40%, stroke: 2pt + rgb("#C8862B"))
+      #line(length: 40%, stroke: 2pt + nordvale-accent)
       #v(14pt)
       #if title != none and content-to-string(title) != content-to-string(doc-type) {
         text(size: 14pt)[#title]
@@ -185,8 +194,8 @@
       #if is-draft {
         block(
           width: 100%,
-          fill: rgb("#C8862B").lighten(80%),
-          stroke: (left: 3pt + rgb("#C8862B")),
+          fill: nordvale-accent.lighten(80%),
+          stroke: (left: 3pt + nordvale-accent),
           inset: 10pt,
         )[
           #text(weight: "semibold")[Draft]
@@ -296,7 +305,6 @@
         ..approvals.map(approval => signature-block(
           approval.name,
           approval.role,
-          ink: ink,
           rule: muted,
         ))
       )
