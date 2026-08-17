@@ -1,7 +1,7 @@
 Type: Project
 Package: demo.quarto.clinical.report
 Title: Branded Clinical Study Report in Quarto
-Version: 0.1.0
+Version: 2026.08.17
 Authors@R: c(
     person(
       given = "Mickaël",
