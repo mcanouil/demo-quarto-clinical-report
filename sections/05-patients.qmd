@@ -48,5 +48,5 @@ The most frequent reason for discontinuation was `r leading_reason`, recorded fo
 ## Protocol deviations
 
 The pilot study underlying this demonstration ships no protocol deviation dataset, so deviations can be reported only where they ended a subject's participation.
-`r sum(!is.na(adsl[["DCSREAS"]]) & adsl[["DCSREAS"]] == "Protocol violation")` subjects discontinued for a protocol violation; they are listed in @lst-deviation.
+`r sum(!is.na(adsl[["DCSREAS"]]) & adsl[["DCSREAS"]] == "Protocol violation")` subjects discontinued for a protocol violation; they are listed in @listing-deviation.
 Deviations that did not lead to discontinuation cannot be counted here, so no statement is made about their number or their effect on the primary endpoint.

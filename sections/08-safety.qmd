@@ -107,7 +107,7 @@ tlf_output(tlf_ae_serious(adae, adsl), "ae_serious")
 
 :::
 
-Subject-level detail for every serious event is listed in @lst-sae.
+Subject-level detail for every serious event is listed in @listing-sae.
 
 ### Narratives
 
@@ -119,7 +119,7 @@ One narrative is reproduced below to show the structure; the remainder would fol
 
 **Subject 01-701-XXXX, placebo, serious adverse event.**
 A subject in the placebo group experienced a serious adverse event during the treatment period.
-The event began on the study day recorded in @lst-sae, was assessed by the investigator as not related to study drug, and resolved.
+The event began on the study day recorded in @listing-sae, was assessed by the investigator as not related to study drug, and resolved.
 Study drug was not withdrawn and the subject continued in the study.
 
 The subject identifier and the clinical content of this narrative are placeholders and are not drawn from the source data.
@@ -167,7 +167,7 @@ hys_any <- sum(hys_flags[["alt_3x"]] | hys_flags[["ast_3x"]] | hys_flags[["bili_
 
 Subjects meeting the combined aminotransferase and bilirubin criterion: `r nrow(hys_combined)`, in the following treatment groups: `r if (length(hys_groups) == 0L) "none" else paste(tolower(hys_groups), collapse = ", ")`.
 `r hys_any` subjects met at least one criterion in total, too few for the difference between treatment groups to be interpretable, so the laboratory data show no signal of xanomeline-related liver injury.
-Subject-level values for every subject meeting any criterion are listed in @lst-lab-abnormal.
+Subject-level values for every subject meeting any criterion are listed in @listing-lab-abnormal.
 
 ## Vital signs
 

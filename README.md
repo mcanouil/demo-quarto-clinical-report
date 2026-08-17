@@ -14,7 +14,9 @@ A complete Quarto project that turns pharmaverse ADaM data into a branded, spons
 - Fonts bundled in the extension, so the output is reproducible on any machine.
 - The same section files rendered either as a Quarto book or as a single long document, selected with a Quarto profile.
 - An analysis layer built on the pharmaverse: `pharmaverseadam` data, one `admiral` derivation, `gtsummary` tables that retain their Analysis Results Datasets, and `ggplot2` figures.
-- Cross-reference divs around every table, listing and figure, with captions computed in R from a single index that also maps each output to its ICH E3 number.
+- Cross-reference divs around every table, listing and figure, with captions computed in R from a single index that also holds the ICH E3 output number of each one.
+- A filter that numbers every output with its ICH E3 number, in the caption and in every reference, for the Typst PDF and for the HTML site.
+- A crossref category of its own for the subject data listings, so they are not treated as code listings.
 
 ## Structure
 
@@ -26,6 +28,7 @@ A complete Quarto project that turns pharmaverse ADaM data into a branded, spons
 | `R/00-adam.R`                    | Builds the analysis datasets, including the ADTTE derived with `admiral`.      |
 | `R/brand.R`                      | Reads the brand and applies it to `ggplot2`, `gt` and `gtsummary`.             |
 | `R/tlf-index.R`                  | The caption, source note and ICH E3 number of every output, in one place.      |
+| `R/01-tlf-numbers.R`             | Writes those numbers for the filter that applies them. Runs at pre-render.     |
 | `R/tlf.R`                        | One function per table, listing or figure.                                     |
 | `tests/testthat/`                | Invariants, independent recomputation and double programming of the results.   |
 | `sections/`                      | The ICH E3 sections, used by both profiles.                                    |

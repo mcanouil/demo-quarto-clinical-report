@@ -156,7 +156,7 @@ test_that("the TLF index assigns each key, ref and number exactly once", {
 })
 
 test_that("each cross-reference identifier carries the prefix for its kind", {
-  expected <- c(Table = "tbl-", Figure = "fig-", Listing = "lst-")
+  expected <- c(Table = "tbl-", Figure = "fig-", Listing = "listing-")
 
   expect_true(all(
     startsWith(tlf_index[["ref"]], expected[tlf_index[["kind"]]])
@@ -209,4 +209,25 @@ test_that("every indexed output is wrapped in a cross-reference div", {
   )
 
   expect_equal(missing_div, character(0))
+})
+
+test_that("each output number sits under the ICH E3 section it records", {
+  expect_true(all(
+    startsWith(tlf_index[["number"]], tlf_index[["section"]])
+  ))
+})
+
+test_that("the numbers written for the filter match the index", {
+  path <- tempfile(fileext = ".json")
+  on.exit(unlink(path), add = TRUE)
+
+  tlf_write_numbers(path)
+  # `read_json()` gives a named list of scalars, which `unlist()` turns into
+  # the named character vector the filter effectively reads.
+  written <- unlist(jsonlite::read_json(path))
+
+  expect_equal(
+    written[tlf_index[["ref"]]],
+    stats::setNames(tlf_index[["number"]], tlf_index[["ref"]])
+  )
 })

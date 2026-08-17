@@ -46,5 +46,5 @@ Analyses of continuous endpoints use the observed values at each visit, so the a
 All analyses were produced in R with the pharmaverse packages.
 Analysis data are the CDISC pilot ADaM datasets distributed in `pharmaverseadam`, with the time-to-event dataset derived using `admiral` and the reason for discontinuation taken from the SDTM disposition domain in `pharmaversesdtm`.
 Summary tables are computed with `gtsummary`, which retains the underlying Analysis Results Datasets, and rendered with `gt`.
-Each table, listing and figure sits in a Quarto cross-reference div, so Quarto numbers it and resolves every reference to it; titles, populations and source notes come from a single index, `R/tlf-index.R`, which also maps each output to the ICH E3 output number and section it stands for.
+Each table, listing and figure sits in a Quarto cross-reference div, so every reference to it resolves; titles, populations, source notes and ICH E3 output numbers come from a single index, `R/tlf-index.R`, and the `tlf-numbers.lua` filter numbers each output with the ICH E3 number recorded there.
 Package versions are listed in @sec-reproducibility.

@@ -101,6 +101,17 @@ figure > svg {
   margin-block: 1.5rem;
 }
 
+// Quarto aligns a float to the left whenever the name of its type is
+// `Listing`, because a code listing carries annotations that need it. These
+// listings are tabular subject data, so they follow the tables and stay
+// centred.
+.quarto-figure-left:has(> figure.quarto-float-listing) {
+  > figure > div,
+  > figure > p {
+    text-align: center;
+  }
+}
+
 @media print {
   .navbar,
   .sidebar,

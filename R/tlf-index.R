@@ -138,7 +138,7 @@ tlf_index <- dplyr::bind_rows(
     key = "exposure",
     ref = "tbl-exposure",
     kind = "Table",
-    number = "14.3.1",
+    number = "14.3.5",
     section = "14.3",
     title = "Extent of exposure",
     subtitle = "Safety population",
@@ -148,7 +148,7 @@ tlf_index <- dplyr::bind_rows(
     key = "conmeds",
     ref = "tbl-conmeds",
     kind = "Table",
-    number = "14.3.2",
+    number = "14.3.6",
     section = "14.3",
     title = "Prior and concomitant medications by drug class and preferred term",
     subtitle = "Medications taken by at least 5% of subjects in any treatment group, safety population",
@@ -158,8 +158,8 @@ tlf_index <- dplyr::bind_rows(
     key = "ae_overview",
     ref = "tbl-ae-overview",
     kind = "Table",
-    number = "14.3.3",
-    section = "14.3",
+    number = "14.3.1.1",
+    section = "14.3.1",
     title = "Overview of treatment-emergent adverse events",
     subtitle = "Safety population",
     source_note = "Subjects are counted once in each row. A treatment-emergent adverse event started on or after the first dose of study drug."
@@ -168,8 +168,8 @@ tlf_index <- dplyr::bind_rows(
     key = "ae_soc_pt",
     ref = "tbl-ae-soc-pt",
     kind = "Table",
-    number = "14.3.4",
-    section = "14.3",
+    number = "14.3.1.2",
+    section = "14.3.1",
     title = "Treatment-emergent adverse events by system organ class and preferred term",
     subtitle = "Events reported by at least 5% of subjects in any treatment group, safety population",
     source_note = "Subjects reporting more than one event within a system organ class or preferred term are counted once. Percentages use the number of safety-population subjects in each treatment group as denominator. The overall row and the rows for each class count every subject with a qualifying record, including subjects whose only terms fall below the reporting threshold and are therefore not shown."
@@ -178,8 +178,8 @@ tlf_index <- dplyr::bind_rows(
     key = "ae_severity",
     ref = "tbl-ae-severity",
     kind = "Table",
-    number = "14.3.5",
-    section = "14.3",
+    number = "14.3.1.3",
+    section = "14.3.1",
     title = "Treatment-emergent adverse events by maximum severity",
     subtitle = "Events reported by at least 5% of subjects in any treatment group, safety population",
     source_note = "Subjects reporting more than one event within a preferred term are counted once, under the highest severity reported for that term. Percentages use the number of safety-population subjects in each treatment group as denominator. The overall row and the rows for each class count every subject with a qualifying record, including subjects whose only terms fall below the reporting threshold and are therefore not shown."
@@ -188,8 +188,8 @@ tlf_index <- dplyr::bind_rows(
     key = "ae_relationship",
     ref = "tbl-ae-relationship",
     kind = "Table",
-    number = "14.3.6",
-    section = "14.3",
+    number = "14.3.1.4",
+    section = "14.3.1",
     title = "Treatment-emergent adverse events by relationship to study drug",
     subtitle = "Events reported by at least 5% of subjects in any treatment group, safety population",
     source_note = "Subjects reporting more than one event within a preferred term are counted once, as related if any event for that term was investigator-assessed as related. Percentages use the number of safety-population subjects in each treatment group as denominator. The overall row and the rows for each class count every subject with a qualifying record, including subjects whose only terms fall below the reporting threshold and are therefore not shown."
@@ -198,8 +198,8 @@ tlf_index <- dplyr::bind_rows(
     key = "ae_serious",
     ref = "tbl-ae-serious",
     kind = "Table",
-    number = "14.3.7",
-    section = "14.3",
+    number = "14.3.1.5",
+    section = "14.3.1",
     title = "Serious treatment-emergent adverse events",
     subtitle = "Safety population",
     source_note = "Seriousness was assessed by the investigator according to the protocol definition."
@@ -208,8 +208,8 @@ tlf_index <- dplyr::bind_rows(
     key = "lab_shift_alt",
     ref = "tbl-lab-shift-alt",
     kind = "Table",
-    number = "14.3.8.1",
-    section = "14.3",
+    number = "14.3.4.1",
+    section = "14.3.4",
     title = "Shift from baseline to worst post-baseline category",
     subtitle = "Alanine aminotransferase, safety population",
     source_note = "Categories are relative to the reference range of the reporting laboratory. The worst post-baseline category is high if any post-baseline value was high, otherwise low if any value was low. Percentages use the number of subjects in each baseline category and treatment group as denominator, so they sum to 100% within each baseline category."
@@ -218,8 +218,8 @@ tlf_index <- dplyr::bind_rows(
     key = "lab_shift_ast",
     ref = "tbl-lab-shift-ast",
     kind = "Table",
-    number = "14.3.8.2",
-    section = "14.3",
+    number = "14.3.4.2",
+    section = "14.3.4",
     title = "Shift from baseline to worst post-baseline category",
     subtitle = "Aspartate aminotransferase, safety population",
     source_note = "Categories are relative to the reference range of the reporting laboratory. The worst post-baseline category is high if any post-baseline value was high, otherwise low if any value was low. Percentages use the number of subjects in each baseline category and treatment group as denominator, so they sum to 100% within each baseline category."
@@ -228,8 +228,8 @@ tlf_index <- dplyr::bind_rows(
     key = "lab_shift_bili",
     ref = "tbl-lab-shift-bili",
     kind = "Table",
-    number = "14.3.8.3",
-    section = "14.3",
+    number = "14.3.4.3",
+    section = "14.3.4",
     title = "Shift from baseline to worst post-baseline category",
     subtitle = "Bilirubin, safety population",
     source_note = "Categories are relative to the reference range of the reporting laboratory. The worst post-baseline category is high if any post-baseline value was high, otherwise low if any value was low. Percentages use the number of subjects in each baseline category and treatment group as denominator, so they sum to 100% within each baseline category."
@@ -238,8 +238,8 @@ tlf_index <- dplyr::bind_rows(
     key = "lab_shift_creat",
     ref = "tbl-lab-shift-creat",
     kind = "Table",
-    number = "14.3.8.4",
-    section = "14.3",
+    number = "14.3.4.4",
+    section = "14.3.4",
     title = "Shift from baseline to worst post-baseline category",
     subtitle = "Creatinine, safety population",
     source_note = "Categories are relative to the reference range of the reporting laboratory. The worst post-baseline category is high if any post-baseline value was high, otherwise low if any value was low. Percentages use the number of subjects in each baseline category and treatment group as denominator, so they sum to 100% within each baseline category."
@@ -248,8 +248,8 @@ tlf_index <- dplyr::bind_rows(
     key = "hys_law",
     ref = "tbl-hys-law",
     kind = "Table",
-    number = "14.3.9",
-    section = "14.3",
+    number = "14.3.4.5",
+    section = "14.3.4",
     title = "Potential drug-induced liver injury",
     subtitle = "Safety population",
     source_note = "Counts are of subjects with at least one post-baseline value meeting each criterion, relative to the upper limit of the reference range of the reporting laboratory. The combined criterion requires an aminotransferase elevation and a bilirubin elevation in the same subject, not necessarily on the same day, and is a screen for potential drug-induced liver injury rather than a diagnosis."
@@ -258,7 +258,7 @@ tlf_index <- dplyr::bind_rows(
     key = "vitals_shift",
     ref = "tbl-vitals-shift",
     kind = "Table",
-    number = "14.3.10",
+    number = "14.3.7",
     section = "14.3",
     title = "Shift from baseline to worst post-baseline category",
     subtitle = "Systolic blood pressure measured supine, safety population",
@@ -268,7 +268,7 @@ tlf_index <- dplyr::bind_rows(
     key = "ecg_shift",
     ref = "tbl-ecg-shift",
     kind = "Table",
-    number = "14.3.11",
+    number = "14.3.8",
     section = "14.3",
     title = "Shift from baseline to worst post-baseline category",
     subtitle = "QTcF interval, safety population",
@@ -277,7 +277,7 @@ tlf_index <- dplyr::bind_rows(
   # 16.2 Individual subject data listings
   tlf_entry_spec(
     key = "listing_discontinuation",
-    ref = "lst-discontinuation",
+    ref = "listing-discontinuation",
     kind = "Listing",
     number = "16.2.1.1",
     section = "16.2.1",
@@ -287,7 +287,7 @@ tlf_index <- dplyr::bind_rows(
   ),
   tlf_entry_spec(
     key = "listing_deviation",
-    ref = "lst-deviation",
+    ref = "listing-deviation",
     kind = "Listing",
     number = "16.2.2.1",
     section = "16.2.2",
@@ -297,7 +297,7 @@ tlf_index <- dplyr::bind_rows(
   ),
   tlf_entry_spec(
     key = "listing_demographics",
-    ref = "lst-demographics",
+    ref = "listing-demographics",
     kind = "Listing",
     number = "16.2.4.1",
     section = "16.2.4",
@@ -307,7 +307,7 @@ tlf_index <- dplyr::bind_rows(
   ),
   tlf_entry_spec(
     key = "listing_sae",
-    ref = "lst-sae",
+    ref = "listing-sae",
     kind = "Listing",
     number = "16.2.7.1",
     section = "16.2.7",
@@ -317,7 +317,7 @@ tlf_index <- dplyr::bind_rows(
   ),
   tlf_entry_spec(
     key = "listing_lab_abnormal",
-    ref = "lst-lab-abnormal",
+    ref = "listing-lab-abnormal",
     kind = "Listing",
     number = "16.2.8.1",
     section = "16.2.8",
@@ -357,6 +357,28 @@ tlf_ref <- function(key) {
   tlf_entry(key)[["ref"]]
 }
 
+#' Write the cross-reference identifier and ICH E3 number of every output.
+#'
+#' The `tlf-numbers.lua` filter reads this file and numbers each output with
+#' the ICH E3 number recorded here, in place of the sequence Quarto would
+#' otherwise give it. R owns the numbers, the filter only applies them.
+#'
+#' @param path Where to write the file. The filter reads the same path,
+#'   relative to the project directory.
+#' @return The path, invisibly.
+tlf_write_numbers <- function(path = "data/tlf-numbers.json") {
+  dir.create(dirname(path), showWarnings = FALSE, recursive = TRUE)
+
+  numbers <- stats::setNames(
+    as.list(tlf_index[["number"]]),
+    tlf_index[["ref"]]
+  )
+
+  jsonlite::write_json(numbers, path, auto_unbox = TRUE, pretty = TRUE)
+
+  invisible(path)
+}
+
 #' Render an output with its registered source note.
 #'
 #' Accepts a `gtsummary` table or a data frame. Title and population are
@@ -375,9 +397,10 @@ tlf_output <- function(x, key, source_note = NULL) {
 
 #' The index of every output, as a Markdown definition list.
 #'
-#' Each term is a cross-reference, so Quarto resolves it to the number it gave
-#' that output, and the description carries the ICH E3 output number and
-#' section that number maps to. Print from a chunk with `#| output: asis`.
+#' Each term is a cross-reference, which `tlf-numbers.lua` resolves to the ICH
+#' E3 number of that output, so the description carries the section that number
+#' belongs to rather than the number again. Print from a chunk with
+#' `#| output: asis`.
 tlf_catalogue <- function() {
   # An output with no population, such as a figure, ends its entry at the
   # section; paste0() would otherwise spell the missing population as "NA".
@@ -394,11 +417,7 @@ tlf_catalogue <- function() {
     ":   ",
     tlf_index[["title"]],
     ".\n",
-    "    ICH E3 output ",
-    tlf_index[["kind"]],
-    " ",
-    tlf_index[["number"]],
-    ", section ",
+    "    ICH E3 section ",
     tlf_index[["section"]],
     ".",
     population
