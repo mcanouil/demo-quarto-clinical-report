@@ -222,7 +222,9 @@ test_that("the numbers written for the filter match the index", {
   on.exit(unlink(path), add = TRUE)
 
   tlf_write_numbers(path)
-  written <- jsonlite::read_json(path, simplifyVector = TRUE)
+  # `read_json()` gives a named list of scalars, which `unlist()` turns into
+  # the named character vector the filter effectively reads.
+  written <- unlist(jsonlite::read_json(path))
 
   expect_equal(
     written[tlf_index[["ref"]]],
