@@ -19,7 +19,7 @@
 -- CONSTANTS (PRIVATE)
 -- ============================================================================
 
---- Where the pre-render step writes the numbers.
+--- Where the pre-render step writes the numbers, inside the project.
 local numbers_path = 'data/tlf-numbers.json'
 
 -- ============================================================================
@@ -36,6 +36,22 @@ local seen = pandoc.List({})
 -- HELPER FUNCTIONS (PRIVATE)
 -- ============================================================================
 
+--- Where to read the numbers from.
+--- An HTML book renders each chapter from the directory of that chapter, so a
+--- path relative to the working directory only resolves for a chapter at the
+--- root of the project. Anchor it to the project instead, and fall back to the
+--- relative path for a document rendered on its own.
+--- @return string The path of the file holding the numbers
+local function numbers_file()
+  local root = quarto.project.directory
+
+  if root == nil or root == '' then
+    return numbers_path
+  end
+
+  return pandoc.path.join({ root, numbers_path })
+end
+
 --- Read the numbers written by the pre-render step.
 --- @return table Identifier to number, empty when the file is absent
 local function read_numbers()
@@ -43,11 +59,12 @@ local function read_numbers()
     return numbers
   end
 
-  local file = io.open(numbers_path, 'r')
+  local path = numbers_file()
+  local file = io.open(path, 'r')
   if file == nil then
     quarto.log.warning(
       'No output numbers at ' ..
-      numbers_path ..
+      path ..
       '; run `Rscript R/01-tlf-numbers.R` to write them. Outputs keep the numbers Quarto gives them.'
     )
     numbers = {}
