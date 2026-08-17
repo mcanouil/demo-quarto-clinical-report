@@ -52,7 +52,7 @@ local float_numbering = [[
 local float_counter_reset = [[
 #counter(figure.where(kind: "quarto-float-fig")).update(0)
 #counter(figure.where(kind: "quarto-float-tbl")).update(0)
-#counter(figure.where(kind: "quarto-float-lst")).update(0)
+#counter(figure.where(kind: "quarto-float-listing")).update(0)
 #counter(math.equation).update(0)]]
 
 -- ============================================================================

@@ -16,6 +16,7 @@ A complete Quarto project that turns pharmaverse ADaM data into a branded, spons
 - An analysis layer built on the pharmaverse: `pharmaverseadam` data, one `admiral` derivation, `gtsummary` tables that retain their Analysis Results Datasets, and `ggplot2` figures.
 - Cross-reference divs around every table, listing and figure, with captions computed in R from a single index that also holds the ICH E3 output number of each one.
 - A filter that numbers every output with its ICH E3 number, in the caption and in every reference, for the Typst PDF and for the HTML site.
+- A crossref category of its own for the subject data listings, so they are not treated as code listings.
 
 ## Structure
 

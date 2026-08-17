@@ -9,6 +9,15 @@ contributes:
       toc-depth: 3
       number-sections: true
       lang: en-GB
+      # Subject data listings are tabular data, not code, so they get their own
+      # crossref category. Quarto left-aligns floats of the built-in `lst` type
+      # and captions them above, which suits code and not a data listing.
+      crossref:
+        custom:
+          - kind: float
+            key: listing
+            reference-prefix: Listing
+            caption-location: top
       execute:
         echo: false
         warning: false

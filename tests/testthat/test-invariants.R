@@ -156,7 +156,7 @@ test_that("the TLF index assigns each key, ref and number exactly once", {
 })
 
 test_that("each cross-reference identifier carries the prefix for its kind", {
-  expected <- c(Table = "tbl-", Figure = "fig-", Listing = "lst-")
+  expected <- c(Table = "tbl-", Figure = "fig-", Listing = "listing-")
 
   expect_true(all(
     startsWith(tlf_index[["ref"]], expected[tlf_index[["kind"]]])

@@ -277,7 +277,7 @@ tlf_index <- dplyr::bind_rows(
   # 16.2 Individual subject data listings
   tlf_entry_spec(
     key = "listing_discontinuation",
-    ref = "lst-discontinuation",
+    ref = "listing-discontinuation",
     kind = "Listing",
     number = "16.2.1.1",
     section = "16.2.1",
@@ -287,7 +287,7 @@ tlf_index <- dplyr::bind_rows(
   ),
   tlf_entry_spec(
     key = "listing_deviation",
-    ref = "lst-deviation",
+    ref = "listing-deviation",
     kind = "Listing",
     number = "16.2.2.1",
     section = "16.2.2",
@@ -297,7 +297,7 @@ tlf_index <- dplyr::bind_rows(
   ),
   tlf_entry_spec(
     key = "listing_demographics",
-    ref = "lst-demographics",
+    ref = "listing-demographics",
     kind = "Listing",
     number = "16.2.4.1",
     section = "16.2.4",
@@ -307,7 +307,7 @@ tlf_index <- dplyr::bind_rows(
   ),
   tlf_entry_spec(
     key = "listing_sae",
-    ref = "lst-sae",
+    ref = "listing-sae",
     kind = "Listing",
     number = "16.2.7.1",
     section = "16.2.7",
@@ -317,7 +317,7 @@ tlf_index <- dplyr::bind_rows(
   ),
   tlf_entry_spec(
     key = "listing_lab_abnormal",
-    ref = "lst-lab-abnormal",
+    ref = "listing-lab-abnormal",
     kind = "Listing",
     number = "16.2.8.1",
     section = "16.2.8",

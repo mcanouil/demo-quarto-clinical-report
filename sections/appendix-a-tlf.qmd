@@ -2,17 +2,9 @@
 
 # Listings {#sec-appendix-tlf}
 
-<!-- Quarto left-aligns listing floats for code listings and injects that show
-rule before the body, so it beats anything the format template sets. These
-listings are tabular subject data, so they follow the tables and stay centred. -->
-
-```{=typst}
-#show figure.where(kind: "quarto-float-lst"): set align(center)
-```
-
 ## Individual subject data listings
 
-::: {#lst-discontinuation}
+::: {#listing-discontinuation}
 
 ```{r}
 #| label: listing-discontinuation
@@ -24,7 +16,7 @@ tlf_output(listing_discontinuation(adsl), "listing_discontinuation")
 
 :::
 
-::: {#lst-deviation}
+::: {#listing-deviation}
 
 ```{r}
 #| label: listing-deviation
@@ -36,7 +28,7 @@ tlf_output(listing_deviation(adsl), "listing_deviation")
 
 :::
 
-::: {#lst-demographics}
+::: {#listing-demographics}
 
 ```{r}
 #| label: listing-demographics
@@ -50,7 +42,7 @@ tlf_output(listing_demographics(adsl), "listing_demographics")
 
 ::: {.landscape}
 
-::: {#lst-sae}
+::: {#listing-sae}
 
 ```{r}
 #| label: listing-sae
@@ -62,7 +54,7 @@ tlf_output(listing_serious_ae(adae), "listing_sae")
 
 :::
 
-::: {#lst-lab-abnormal}
+::: {#listing-lab-abnormal}
 
 ```{r}
 #| label: listing-lab-abnormal

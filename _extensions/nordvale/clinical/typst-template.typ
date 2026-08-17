@@ -145,7 +145,7 @@
   // emits once the block is allowed to break. Plots stay unbreakable so an
   // image never parts from its caption.
   show figure.where(kind: "quarto-float-tbl"): set block(breakable: true)
-  show figure.where(kind: "quarto-float-lst"): set block(breakable: true)
+  show figure.where(kind: "quarto-float-listing"): set block(breakable: true)
 
   show figure.caption: set text(size: 0.9em, fill: muted)
   show link: set text(fill: primary)
