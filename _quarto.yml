@@ -2,6 +2,8 @@ project:
   pre-render:
     - R/00-adam.R
     - R/01-tlf-numbers.R
+  post-render:
+    - R/02-html-numbers.R
   execute-dir: project
 
 profile:

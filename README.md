@@ -29,6 +29,7 @@ A complete Quarto project that turns pharmaverse ADaM data into a branded, spons
 | `R/brand.R`                      | Reads the brand and applies it to `ggplot2`, `gt` and `gtsummary`.             |
 | `R/tlf-index.R`                  | The caption, source note and ICH E3 number of every output, in one place.      |
 | `R/01-tlf-numbers.R`             | Writes those numbers for the filter that applies them. Runs at pre-render.     |
+| `R/02-html-numbers.R`            | Numbers the cross-references of the HTML book. Runs at post-render.            |
 | `R/tlf.R`                        | One function per table, listing or figure.                                     |
 | `tests/testthat/`                | Invariants, independent recomputation and double programming of the results.   |
 | `sections/`                      | The ICH E3 sections, used by both profiles.                                    |
