@@ -1,0 +1,137 @@
+# @license MIT
+# @copyright 2026 Mickaël Canouil
+# @author Mickaël Canouil
+# @source https://github.com/mcanouil/demo-quarto-clinical-report
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, `YYYY.MM.DD` by default"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+# Serialise releases and never cancel one in flight: stopping midway could
+# leave the bump on `main` with no tag and no release.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Bump the version and create the release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+
+    steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_KEY }}
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          set -euo pipefail
+          echo "user-id=$(gh api "/users/${APP_SLUG}[bot]" --jq .id)" >> "${GITHUB_OUTPUT}"
+
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
+
+      - name: Configure Environment for Git User
+        env:
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+          USER_ID: ${{ steps.get-user-id.outputs.user-id }}
+        run: |
+          set -euo pipefail
+          git config --global user.name "${APP_SLUG}[bot]"
+          git config --global user.email "${USER_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
+
+      # The version is the date, so a release says when the report was built
+      # rather than claiming a semantic version the project does not carry.
+      - name: Resolve the version
+        id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          VERSION="${INPUT_VERSION:-$(date -u +%Y.%m.%d)}"
+          DATE="${VERSION//./-}"
+          if git rev-parse "${VERSION}" >/dev/null 2>&1; then
+            echo "::error::Tag ${VERSION} exists already."
+            exit 1
+          fi
+          echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
+          echo "date=${DATE}" >> "${GITHUB_OUTPUT}"
+
+      # Release what the render workflow has already built and checked, rather
+      # than restoring `renv` and rendering both profiles a second time.
+      - name: Check that the render succeeded for this commit
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          CONCLUSION=$(gh run list \
+            --workflow "Render" \
+            --branch "${GITHUB_REF_NAME}" \
+            --commit "${GITHUB_SHA}" \
+            --limit 1 \
+            --json conclusion \
+            --jq '.[0].conclusion // "none"')
+          if [ "${CONCLUSION}" != "success" ]; then
+            echo "::error::The last render of ${GITHUB_SHA} is '${CONCLUSION}'; release a commit that renders."
+            exit 1
+          fi
+
+      # `_metadata-csr.yml` is deliberately untouched: `report-version` and
+      # `report-date` belong to the fictional study report, not to this project.
+      - name: Bump the version and roll the changelog
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          DATE: ${{ steps.version.outputs.date }}
+        run: |
+          set -euo pipefail
+          sed -i "s/^Version: .*/Version: ${VERSION}/" DESCRIPTION
+          sed -i "s/^version: .*/version: ${VERSION}/" _extensions/nordvale/clinical/_extension.yml
+          sed -i "s/^version: .*/version: \"${VERSION}\"/" CITATION.cff
+          sed -i "s/^date-released: .*/date-released: \"${DATE}\"/" CITATION.cff
+
+          awk '/^## \[Unreleased\]/{flag=1; next} /^## /{flag=0} flag' CHANGELOG.md \
+            | sed '/./,$!d' > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "::error::The Unreleased section of CHANGELOG.md is empty."
+            exit 1
+          fi
+          sed -i "s/^## \[Unreleased\]$/## [${VERSION}] - ${DATE}/" CHANGELOG.md
+          sed -i "0,/^## \[${VERSION}\] - ${DATE}$/s//## [Unreleased]\n\n## [${VERSION}] - ${DATE}/" CHANGELOG.md
+
+      - name: Commit, tag and release
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          DATE: ${{ steps.version.outputs.date }}
+        run: |
+          set -euo pipefail
+          git add CHANGELOG.md CITATION.cff DESCRIPTION _extensions/nordvale/clinical/_extension.yml
+          git commit -m "chore(release): ${VERSION}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+          gh release create "${VERSION}" \
+            --title "${DATE}" \
+            --notes-file release-notes.md \
+            --target "$(git rev-parse HEAD)"
