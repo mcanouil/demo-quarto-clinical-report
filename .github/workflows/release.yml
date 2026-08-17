@@ -108,7 +108,7 @@ jobs:
         run: |
           set -euo pipefail
           sed -i "s/^Version: .*/Version: ${VERSION}/" DESCRIPTION
-          sed -i "s/^version: .*/version: ${VERSION}/" _extensions/nordvale/clinical/_extension.yml
+          # sed -i "s/^version: .*/version: ${VERSION}/" _extensions/nordvale/clinical/_extension.yml
           sed -i "s/^version: .*/version: \"${VERSION}\"/" CITATION.cff
           sed -i "s/^date-released: .*/date-released: \"${DATE}\"/" CITATION.cff
 
@@ -128,7 +128,7 @@ jobs:
           DATE: ${{ steps.version.outputs.date }}
         run: |
           set -euo pipefail
-          git add CHANGELOG.md CITATION.cff DESCRIPTION _extensions/nordvale/clinical/_extension.yml
+          # git add CHANGELOG.md CITATION.cff DESCRIPTION _extensions/nordvale/clinical/_extension.yml
           git commit -m "chore(release): ${VERSION}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
           gh release create "${VERSION}" \
