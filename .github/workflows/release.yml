@@ -128,7 +128,8 @@ jobs:
           DATE: ${{ steps.version.outputs.date }}
         run: |
           set -euo pipefail
-          # git add CHANGELOG.md CITATION.cff DESCRIPTION _extensions/nordvale/clinical/_extension.yml
+          git add CHANGELOG.md CITATION.cff DESCRIPTION
+          # git add _extensions/nordvale/clinical/_extension.yml
           git commit -m "chore(release): ${VERSION}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
           gh release create "${VERSION}" \
