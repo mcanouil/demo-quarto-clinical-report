@@ -81,6 +81,17 @@ jobs:
             exit 1
           fi
 
+      # An explicit version also sets the release date, so `2026.09.01` is
+      # dated 2026-09-01. Without one, the bump uses today.
+      - name: Resolve the release date
+        id: date
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          CORE="${INPUT_VERSION%%-*}"
+          echo "date=${CORE//./-}" >> "${GITHUB_OUTPUT}"
+
       # The version is the date, so a release says when the report was built
       # rather than claiming a semantic version the project does not carry. A
       # second release on the same day becomes `YYYY.MM.DD-2`.
@@ -91,6 +102,7 @@ jobs:
         uses: mcanouil/release-actions/bump@v1
         with:
           bump: ${{ inputs.version || 'calver' }}
+          date: ${{ steps.date.outputs.date }}
           changelog-heading: "## [{version}] - {date}"
           targets: |
             - file: DESCRIPTION
@@ -109,12 +121,19 @@ jobs:
           VERSION: ${{ steps.bump.outputs.version }}
         run: |
           set -euo pipefail
-          if git ls-remote --exit-code --tags origin "refs/tags/${VERSION}" >/dev/null; then
-            echo "::error::Tag ${VERSION} exists already."
+          STATUS=0
+          git ls-remote --exit-code --tags origin "refs/tags/${VERSION}" >/dev/null || STATUS=$?
+          case "${STATUS}" in
+            0) echo "::error::Tag ${VERSION} exists already."; exit 1 ;;
+            2) ;;
+            *) echo "::error::Could not list the tags of origin (git exit ${STATUS})."; exit 1 ;;
+          esac
+          if OUTPUT=$(gh release view "${VERSION}" 2>&1); then
+            echo "::error::A release ${VERSION} exists already, perhaps as a draft."
             exit 1
           fi
-          if gh release view "${VERSION}" >/dev/null 2>&1; then
-            echo "::error::A release ${VERSION} exists already, perhaps as a draft."
+          if [ "${OUTPUT}" != "release not found" ]; then
+            echo "::error::Could not check for release ${VERSION}: ${OUTPUT}"
             exit 1
           fi
 
