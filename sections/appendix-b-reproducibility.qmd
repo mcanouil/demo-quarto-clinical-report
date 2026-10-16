@@ -158,5 +158,5 @@ cat(
 )
 ```
 
-The exact package versions are pinned in `renv.lock`.
-Running `renv::restore()` followed by `quarto render` reproduces this report from a clean checkout.
+The exact package versions are pinned in `rproj.lock`.
+Running `rig proj sync` followed by `quarto render` reproduces this report from a clean checkout.
