@@ -94,7 +94,12 @@ jobs:
             exit 1
           fi
           CORE="${INPUT_VERSION%%-*}"
-          echo "date=${CORE//./-}" >> "${GITHUB_OUTPUT}"
+          DATE="${CORE//./-}"
+          if [[ -n "${DATE}" && "$(date -u -d "${DATE}" +%Y-%m-%d 2>/dev/null || true)" != "${DATE}" ]]; then
+            echo "::error::Version '${INPUT_VERSION}' is not a calendar date."
+            exit 1
+          fi
+          echo "date=${DATE}" >> "${GITHUB_OUTPUT}"
 
       # The version is the date, so a release says when the report was built
       # rather than claiming a semantic version the project does not carry. A
@@ -165,7 +170,9 @@ jobs:
         with:
           version: ${{ steps.bump.outputs.version }}
           body-file: ${{ steps.notes.outputs.body-file }}
-          title: "{date}"
+          # A later release on the same day is titled by its version, such as
+          # `2026.10.16-2`, so it stands apart from the first.
+          title: ${{ contains(steps.bump.outputs.version, '-') && '{version}' || '{date}' }}
           date: ${{ steps.bump.outputs.date }}
           target: ${{ steps.push.outputs.sha }}
           token: ${{ steps.app-token.outputs.token }}
