@@ -63,7 +63,7 @@ jobs:
           git config --global user.email "${USER_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
 
       # Release what the render workflow has already built and checked, rather
-      # than restoring `renv` and rendering both profiles a second time.
+      # than installing the R packages and rendering both profiles a second time.
       - name: Check that the render succeeded for this commit
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -114,8 +114,8 @@ jobs:
           date: ${{ steps.date.outputs.date }}
           changelog-heading: "## [{version}] - {date}"
           targets: |
-            - file: DESCRIPTION
-              pattern: '^Version: {version}$'
+            - file: rproj.toml
+              pattern: '^version = "{version}"$'
               source: true
             - file: CITATION.cff
               pattern: '^version: "{version}"$'

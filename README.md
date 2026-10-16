@@ -24,7 +24,7 @@ A complete Quarto project that turns pharmaverse ADaM data into a branded, spons
 | -------------------------------- | ------------------------------------------------------------------------------ |
 | `_brand.yml`                     | Sponsor colours, typography and logos.                                         |
 | `_extensions/nordvale/clinical/` | The Typst and HTML formats, the SCSS theme and the bundled fonts.              |
-| `DESCRIPTION`                    | Declares the R dependencies; `renv` snapshots in explicit mode from this file. |
+| `rproj.toml`, `rproj.lock`       | Declare the R dependencies and pin their versions for `rig proj`.              |
 | `R/00-adam.R`                    | Builds the analysis datasets, including the ADTTE derived with `admiral`.      |
 | `R/brand.R`                      | Reads the brand and applies it to `ggplot2`, `gt` and `gtsummary`.             |
 | `R/tlf-index.R`                  | The caption, source note and ICH E3 number of every output, in one place.      |
@@ -40,14 +40,15 @@ A complete Quarto project that turns pharmaverse ADaM data into a branded, spons
 ## Requirements
 
 - Quarto 1.10.18 or later, for the `quarto.language` template variables used by the Typst format.
-- R 4.4 or later, with the packages pinned in `renv.lock`.
+- R 4.4 or later, with the packages pinned in `rproj.lock`.
+- [rig](https://github.com/r-lib/rig) 0.11.0 or later, to install those packages.
 
 ## Rendering
 
-Restore the R environment once:
+Install the R packages into the project library once:
 
 ```sh
-Rscript -e 'renv::restore()'
+rig proj sync
 ```
 
 Render the book, which is the default profile:

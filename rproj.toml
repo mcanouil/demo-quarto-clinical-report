@@ -1,0 +1,47 @@
+[project]
+name = "demo.quarto.clinical.report"
+version = "2026.08.17"
+type = "project"
+title = "Branded Clinical Study Report in Quarto"
+description = '''
+Declares the R dependencies of the clinical study report project.'''
+license = "MIT + file LICENSE"
+
+[[project.authors]]
+name = "Mickaël Canouil"
+email = "pro@mickael.canouil.dev"
+roles = [
+    "aut",
+    "cre",
+]
+orcid = "0000-0002-3396-4549"
+
+[dependencies]
+R = ">= 4.4"
+admiral = "*"
+broom = "*"
+cards = "*"
+cardx = "*"
+dplyr = "*"
+emmeans = "*"
+ggplot2 = "*"
+ggsurvfit = "*"
+gt = "*"
+gtsummary = "*"
+jsonlite = "*"
+knitr = "*"
+pharmaverseadam = "*"
+pharmaversesdtm = "*"
+rmarkdown = "*"
+scales = "*"
+sessioninfo = "*"
+stringr = "*"
+survival = "*"
+svglite = "*"
+systemfonts = "*"
+testthat = "*"
+tibble = "*"
+yaml = "*"
+
+[description]
+Encoding = "UTF-8"

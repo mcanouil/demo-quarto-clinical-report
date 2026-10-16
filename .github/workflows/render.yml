@@ -28,20 +28,25 @@ jobs:
         with:
           version: pre-release
 
-      - name: Install system libraries for the text and graphics stack
+      - name: Set up rig
+        env:
+          RIG_VERSION: 0.11.0
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            libfontconfig1-dev libfreetype6-dev libharfbuzz-dev libfribidi-dev \
-            libpng-dev libtiff-dev libjpeg-dev
+          set -euo pipefail
+          curl -fsSL "https://github.com/r-lib/rig/releases/download/v${RIG_VERSION}/rig-linux-$(arch)-${RIG_VERSION}.tar.gz" |
+            sudo tar xz -C /usr/local
 
       - name: Set up R
-        uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
+        run: rig add "$(sed -n 's/^r_version = "\(.*\)"$/\1/p' rproj.lock | head -n 1)"
 
-      - name: Restore R packages
-        uses: r-lib/actions/setup-renv@v2
+      - name: Cache the project library
+        uses: actions/cache@v6
+        with:
+          path: .rvenv
+          key: rvenv-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('rproj.lock') }}
+
+      - name: Install R packages
+        run: rig proj sync --frozen
 
       - name: Build the analysis datasets
         run: Rscript R/00-adam.R
