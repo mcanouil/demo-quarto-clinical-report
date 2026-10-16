@@ -41,6 +41,7 @@ jobs:
         with:
           path: .rvenv
           key: rvenv-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('rproj.lock') }}
+          restore-keys: rvenv-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Install R and the R packages
         run: rig proj sync --frozen

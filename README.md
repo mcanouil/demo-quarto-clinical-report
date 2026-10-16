@@ -40,8 +40,9 @@ A complete Quarto project that turns pharmaverse ADaM data into a branded, spons
 ## Requirements
 
 - Quarto 1.10.18 or later, for the `quarto.language` template variables used by the Typst format.
-- R 4.4 or later, with the packages pinned in `rproj.lock`.
-- [rig](https://github.com/r-lib/rig) 0.11.0 or later, to install those packages.
+- [rig](https://github.com/r-lib/rig) 0.11.0 or later.
+- R 4.6.1 and the packages pinned in `rproj.lock`.
+  `rig proj sync` installs both if they are missing.
 
 ## Rendering
 
