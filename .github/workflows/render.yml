@@ -36,16 +36,13 @@ jobs:
           curl -fsSL "https://github.com/r-lib/rig/releases/download/v${RIG_VERSION}/rig-linux-$(arch)-${RIG_VERSION}.tar.gz" |
             sudo tar xz -C /usr/local
 
-      - name: Set up R
-        run: rig add "$(sed -n 's/^r_version = "\(.*\)"$/\1/p' rproj.lock | head -n 1)"
-
       - name: Cache the project library
         uses: actions/cache@v6
         with:
           path: .rvenv
           key: rvenv-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('rproj.lock') }}
 
-      - name: Install R packages
+      - name: Install R and the R packages
         run: rig proj sync --frozen
 
       - name: Build the analysis datasets
