@@ -89,6 +89,10 @@ jobs:
           INPUT_VERSION: ${{ inputs.version }}
         run: |
           set -euo pipefail
+          if [[ -n "${INPUT_VERSION}" && ! "${INPUT_VERSION}" =~ ^[0-9]{4}\.[0-9]{2}\.[0-9]{2}(-[0-9]+)?$ ]]; then
+            echo "::error::Version must be YYYY.MM.DD or YYYY.MM.DD-N, not '${INPUT_VERSION}'."
+            exit 1
+          fi
           CORE="${INPUT_VERSION%%-*}"
           echo "date=${CORE//./-}" >> "${GITHUB_OUTPUT}"
 
@@ -132,7 +136,7 @@ jobs:
             echo "::error::A release ${VERSION} exists already, perhaps as a draft."
             exit 1
           fi
-          if [ "${OUTPUT}" != "release not found" ]; then
+          if ! grep -qi 'release not found' <<<"${OUTPUT}"; then
             echo "::error::Could not check for release ${VERSION}: ${OUTPUT}"
             exit 1
           fi
