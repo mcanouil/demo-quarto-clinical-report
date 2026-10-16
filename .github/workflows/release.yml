@@ -50,7 +50,6 @@ jobs:
 
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
 
@@ -62,23 +61,6 @@ jobs:
           set -euo pipefail
           git config --global user.name "${APP_SLUG}[bot]"
           git config --global user.email "${USER_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
-
-      # The version is the date, so a release says when the report was built
-      # rather than claiming a semantic version the project does not carry.
-      - name: Resolve the version
-        id: version
-        env:
-          INPUT_VERSION: ${{ inputs.version }}
-        run: |
-          set -euo pipefail
-          VERSION="${INPUT_VERSION:-$(date -u +%Y.%m.%d)}"
-          DATE="${VERSION//./-}"
-          if git rev-parse "${VERSION}" >/dev/null 2>&1; then
-            echo "::error::Tag ${VERSION} exists already."
-            exit 1
-          fi
-          echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
-          echo "date=${DATE}" >> "${GITHUB_OUTPUT}"
 
       # Release what the render workflow has already built and checked, rather
       # than restoring `renv` and rendering both profiles a second time.
@@ -99,40 +81,76 @@ jobs:
             exit 1
           fi
 
+      # The version is the date, so a release says when the report was built
+      # rather than claiming a semantic version the project does not carry. A
+      # second release on the same day becomes `YYYY.MM.DD-2`.
       # `_metadata-csr.yml` is deliberately untouched: `report-version` and
       # `report-date` belong to the fictional study report, not to this project.
       - name: Bump the version and roll the changelog
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-          DATE: ${{ steps.version.outputs.date }}
-        run: |
-          set -euo pipefail
-          sed -i "s/^Version: .*/Version: ${VERSION}/" DESCRIPTION
-          # sed -i "s/^version: .*/version: ${VERSION}/" _extensions/nordvale/clinical/_extension.yml
-          sed -i "s/^version: .*/version: \"${VERSION}\"/" CITATION.cff
-          sed -i "s/^date-released: .*/date-released: \"${DATE}\"/" CITATION.cff
+        id: bump
+        uses: mcanouil/release-actions/bump@v1
+        with:
+          bump: ${{ inputs.version || 'calver' }}
+          changelog-heading: "## [{version}] - {date}"
+          targets: |
+            - file: DESCRIPTION
+              pattern: '^Version: {version}$'
+              source: true
+            - file: CITATION.cff
+              pattern: '^version: "{version}"$'
+            - file: CITATION.cff
+              pattern: '^date-released: "{date}"$'
 
-          awk '/^## \[Unreleased\]/{flag=1; next} /^## /{flag=0} flag' CHANGELOG.md \
-            | sed '/./,$!d' > release-notes.md
-          if [ ! -s release-notes.md ]; then
-            echo "::error::The Unreleased section of CHANGELOG.md is empty."
-            exit 1
-          fi
-          sed -i "s/^## \[Unreleased\]$/## [${VERSION}] - ${DATE}/" CHANGELOG.md
-          sed -i "0,/^## \[${VERSION}\] - ${DATE}$/s//## [Unreleased]\n\n## [${VERSION}] - ${DATE}/" CHANGELOG.md
-
-      - name: Commit, tag and release
+      # The release step refuses an existing tag too, but only after the push,
+      # which would leave the bump on `main`.
+      - name: Refuse an existing tag or release
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          VERSION: ${{ steps.version.outputs.version }}
-          DATE: ${{ steps.version.outputs.date }}
+          VERSION: ${{ steps.bump.outputs.version }}
         run: |
           set -euo pipefail
-          git add CHANGELOG.md CITATION.cff DESCRIPTION
-          # git add _extensions/nordvale/clinical/_extension.yml
+          if git ls-remote --exit-code --tags origin "refs/tags/${VERSION}" >/dev/null; then
+            echo "::error::Tag ${VERSION} exists already."
+            exit 1
+          fi
+          if gh release view "${VERSION}" >/dev/null 2>&1; then
+            echo "::error::A release ${VERSION} exists already, perhaps as a draft."
+            exit 1
+          fi
+
+      - name: Commit and push the bump
+        id: push
+        env:
+          VERSION: ${{ steps.bump.outputs.version }}
+          FILES: ${{ steps.bump.outputs.files }}
+        run: |
+          set -euo pipefail
+          printf '%s\n' "${FILES}" | git add --pathspec-from-file=-
           git commit -m "chore(release): ${VERSION}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
-          gh release create "${VERSION}" \
-            --title "${DATE}" \
-            --notes-file release-notes.md \
-            --target "$(git rev-parse HEAD)"
+          echo "sha=$(git rev-parse HEAD)" >> "${GITHUB_OUTPUT}"
+
+      - name: Compose the release body
+        id: notes
+        uses: mcanouil/release-actions/notes@v1
+        with:
+          notes-file: ${{ steps.bump.outputs.notes-file }}
+          section-heading: ""
+
+      - name: Create the release
+        uses: mcanouil/release-actions/release@v1
+        with:
+          version: ${{ steps.bump.outputs.version }}
+          body-file: ${{ steps.notes.outputs.body-file }}
+          title: "{date}"
+          date: ${{ steps.bump.outputs.date }}
+          target: ${{ steps.push.outputs.sha }}
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Explain the recovery
+        if: ${{ failure() && steps.push.outputs.sha != '' }}
+        env:
+          VERSION: ${{ steps.bump.outputs.version }}
+          SHA: ${{ steps.push.outputs.sha }}
+        run: |
+          echo "::error::${GITHUB_REF_NAME} holds the bump ${SHA} for ${VERSION}, but the release failed. Create release ${VERSION} on ${SHA} by hand, or revert that commit with a pull request and run this workflow again."
