@@ -31,10 +31,13 @@ jobs:
       - name: Set up rig
         env:
           RIG_VERSION: 0.11.0
+          RIG_SHA256: 27e063df84b6dadb325fa96d13951676b44b69103bb4237b061518fbf564fcf1
         run: |
           set -euo pipefail
-          curl -fsSL "https://github.com/r-lib/rig/releases/download/v${RIG_VERSION}/rig-linux-$(arch)-${RIG_VERSION}.tar.gz" |
-            sudo tar xz -C /usr/local
+          curl -fsSL -o "${RUNNER_TEMP}/rig.tar.gz" \
+            "https://github.com/r-lib/rig/releases/download/v${RIG_VERSION}/rig-linux-x86_64-${RIG_VERSION}.tar.gz"
+          echo "${RIG_SHA256}  ${RUNNER_TEMP}/rig.tar.gz" | sha256sum --check --strict
+          sudo tar xzf "${RUNNER_TEMP}/rig.tar.gz" -C /usr/local
 
       - name: Cache the project library
         uses: actions/cache@v6
