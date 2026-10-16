@@ -113,6 +113,7 @@ jobs:
           bump: ${{ inputs.version || 'calver' }}
           date: ${{ steps.date.outputs.date }}
           changelog-heading: "## [{version}] - {date}"
+          token: ${{ steps.app-token.outputs.token }}
           targets: |
             - file: rproj.toml
               pattern: '^version = "{version}"$'
@@ -121,30 +122,6 @@ jobs:
               pattern: '^version: "{version}"$'
             - file: CITATION.cff
               pattern: '^date-released: "{date}"$'
-
-      # The release step refuses an existing tag too, but only after the push,
-      # which would leave the bump on `main`.
-      - name: Refuse an existing tag or release
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          VERSION: ${{ steps.bump.outputs.version }}
-        run: |
-          set -euo pipefail
-          STATUS=0
-          git ls-remote --exit-code --tags origin "refs/tags/${VERSION}" >/dev/null || STATUS=$?
-          case "${STATUS}" in
-            0) echo "::error::Tag ${VERSION} exists already."; exit 1 ;;
-            2) ;;
-            *) echo "::error::Could not list the tags of origin (git exit ${STATUS})."; exit 1 ;;
-          esac
-          if OUTPUT=$(gh release view "${VERSION}" 2>&1); then
-            echo "::error::A release ${VERSION} exists already, perhaps as a draft."
-            exit 1
-          fi
-          if ! grep -qi 'release not found' <<<"${OUTPUT}"; then
-            echo "::error::Could not check for release ${VERSION}: ${OUTPUT}"
-            exit 1
-          fi
 
       - name: Commit and push the bump
         id: push
