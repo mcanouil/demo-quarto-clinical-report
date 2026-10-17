@@ -32,41 +32,23 @@ jobs:
       actions: read
 
     steps:
-      - name: Create GitHub App token
-        id: app-token
-        uses: actions/create-github-app-token@v3
+      - name: Get the token
+        id: token
+        uses: mcanouil/release-actions/token@v1
         with:
-          client-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.APP_KEY }}
-
-      - name: Get GitHub App User ID
-        id: get-user-id
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
-        run: |
-          set -euo pipefail
-          echo "user-id=$(gh api "/users/${APP_SLUG}[bot]" --jq .id)" >> "${GITHUB_OUTPUT}"
+          app-id: ${{ vars.APP_ID }}
+          app-key: ${{ secrets.APP_KEY }}
 
       - uses: actions/checkout@v7
         with:
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ steps.token.outputs.token }}
           persist-credentials: true
-
-      - name: Configure Environment for Git User
-        env:
-          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
-          USER_ID: ${{ steps.get-user-id.outputs.user-id }}
-        run: |
-          set -euo pipefail
-          git config --global user.name "${APP_SLUG}[bot]"
-          git config --global user.email "${USER_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
 
       # Release what the render workflow has already built and checked, rather
       # than installing the R packages and rendering both profiles a second time.
       - name: Check that the render succeeded for this commit
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.token.outputs.token }}
         run: |
           set -euo pipefail
           CONCLUSION=$(gh run list \
@@ -113,7 +95,7 @@ jobs:
           bump: ${{ inputs.version || 'calver' }}
           date: ${{ steps.date.outputs.date }}
           changelog-heading: "## [{version}] - {date}"
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ steps.token.outputs.token }}
           targets: |
             - file: rproj.toml
               pattern: '^version = "{version}"$'
@@ -123,17 +105,17 @@ jobs:
             - file: CITATION.cff
               pattern: '^date-released: "{date}"$'
 
-      - name: Commit and push the bump
-        id: push
-        env:
-          VERSION: ${{ steps.bump.outputs.version }}
-          FILES: ${{ steps.bump.outputs.files }}
-        run: |
-          set -euo pipefail
-          printf '%s\n' "${FILES}" | git add --pathspec-from-file=-
-          git commit -m "chore(release): ${VERSION}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
-          echo "sha=$(git rev-parse HEAD)" >> "${GITHUB_OUTPUT}"
+      # A message without `[skip ci]`, so the render workflow publishes the
+      # bumped version.
+      - name: Land the bump
+        id: land
+        uses: mcanouil/release-actions/land@v1
+        with:
+          mode: push
+          files: ${{ steps.bump.outputs.files }}
+          version: ${{ steps.bump.outputs.version }}
+          message: "chore(release): ${{ steps.bump.outputs.version }}"
+          token: ${{ steps.token.outputs.token }}
 
       - name: Compose the release body
         id: notes
@@ -151,13 +133,13 @@ jobs:
           # `2026.10.16-2`, so it stands apart from the first.
           title: ${{ contains(steps.bump.outputs.version, '-') && '{version}' || '{date}' }}
           date: ${{ steps.bump.outputs.date }}
-          target: ${{ steps.push.outputs.sha }}
-          token: ${{ steps.app-token.outputs.token }}
+          target: ${{ steps.land.outputs.sha }}
+          token: ${{ steps.token.outputs.token }}
 
       - name: Explain the recovery
-        if: ${{ failure() && steps.push.outputs.sha != '' }}
+        if: ${{ failure() && steps.land.outputs.sha != '' }}
         env:
           VERSION: ${{ steps.bump.outputs.version }}
-          SHA: ${{ steps.push.outputs.sha }}
+          SHA: ${{ steps.land.outputs.sha }}
         run: |
           echo "::error::${GITHUB_REF_NAME} holds the bump ${SHA} for ${VERSION}, but the release failed. Create release ${VERSION} on ${SHA} by hand, or revert that commit with a pull request and run this workflow again."
