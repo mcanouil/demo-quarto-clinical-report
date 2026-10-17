@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2026.10.17] - 2026-10-17
+
 - ci: Get the token and land the release bump with mcanouil/release-actions. (#9)
 
 ## [2026.10.16] - 2026-10-16
