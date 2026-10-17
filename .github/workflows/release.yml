@@ -8,8 +8,8 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version to release, `YYYY.MM.DD` by default"
+      date:
+        description: "Release date, `YYYY-MM-DD`, today by default"
         required: false
         type: string
 
@@ -63,26 +63,6 @@ jobs:
             exit 1
           fi
 
-      # An explicit version also sets the release date, so `2026.09.01` is
-      # dated 2026-09-01. Without one, the bump uses today.
-      - name: Resolve the release date
-        id: date
-        env:
-          INPUT_VERSION: ${{ inputs.version }}
-        run: |
-          set -euo pipefail
-          if [[ -n "${INPUT_VERSION}" && ! "${INPUT_VERSION}" =~ ^[0-9]{4}\.[0-9]{2}\.[0-9]{2}(-[0-9]+)?$ ]]; then
-            echo "::error::Version must be YYYY.MM.DD or YYYY.MM.DD-N, not '${INPUT_VERSION}'."
-            exit 1
-          fi
-          CORE="${INPUT_VERSION%%-*}"
-          DATE="${CORE//./-}"
-          if [[ -n "${DATE}" && "$(date -u -d "${DATE}" +%Y-%m-%d 2>/dev/null || true)" != "${DATE}" ]]; then
-            echo "::error::Version '${INPUT_VERSION}' is not a calendar date."
-            exit 1
-          fi
-          echo "date=${DATE}" >> "${GITHUB_OUTPUT}"
-
       # The version is the date, so a release says when the report was built
       # rather than claiming a semantic version the project does not carry. A
       # second release on the same day becomes `YYYY.MM.DD-2`.
@@ -92,8 +72,8 @@ jobs:
         id: bump
         uses: mcanouil/release-actions/bump@v1
         with:
-          bump: ${{ inputs.version || 'calver' }}
-          date: ${{ steps.date.outputs.date }}
+          bump: calver
+          date: ${{ inputs.date }}
           changelog-heading: "## [{version}] - {date}"
           token: ${{ steps.token.outputs.token }}
           targets: |
@@ -135,11 +115,3 @@ jobs:
           date: ${{ steps.bump.outputs.date }}
           target: ${{ steps.land.outputs.sha }}
           token: ${{ steps.token.outputs.token }}
-
-      - name: Explain the recovery
-        if: ${{ failure() && steps.land.outputs.sha != '' }}
-        env:
-          VERSION: ${{ steps.bump.outputs.version }}
-          SHA: ${{ steps.land.outputs.sha }}
-        run: |
-          echo "::error::${GITHUB_REF_NAME} holds the bump ${SHA} for ${VERSION}, but the release failed. Create release ${VERSION} on ${SHA} by hand, or revert that commit with a pull request and run this workflow again."
