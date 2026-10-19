@@ -1,6 +1,6 @@
 [project]
 name = "demo.quarto.clinical.report"
-version = "2026.10.17-2"
+version = "2026.08.17"
 type = "project"
 title = "Branded Clinical Study Report in Quarto"
 description = '''
