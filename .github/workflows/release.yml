@@ -76,14 +76,11 @@ jobs:
           date: ${{ inputs.date }}
           changelog-heading: "## [{version}] - {date}"
           token: ${{ steps.token.outputs.token }}
+          ecosystems: citation
           targets: |
             - file: rproj.toml
               pattern: '^version = "{version}"$'
               source: true
-            - file: CITATION.cff
-              pattern: '^version: "{version}"$'
-            - file: CITATION.cff
-              pattern: '^date-released: "{date}"$'
 
       # A message without `[skip ci]`, so the render workflow publishes the
       # bumped version.
